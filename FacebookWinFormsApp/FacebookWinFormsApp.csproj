@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="eMenuItem.cs" />
     <Compile Include="FaceBookManager.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

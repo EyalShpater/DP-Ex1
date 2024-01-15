@@ -36,6 +36,12 @@ namespace BasicFacebookFeatures
                 "user_friends"
                 //"friends_location"
                 );
+
+            if (string.IsNullOrEmpty(LoginResult.AccessToken))
+            {
+                LoginResult = null;
+                throw new Exception("Failed to login");
+            }
         }
 
         public List<string> GetFriendsName()

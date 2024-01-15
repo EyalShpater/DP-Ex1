@@ -15,13 +15,14 @@ namespace BasicFacebookFeatures
 {
     public partial class MainForm : Form
     {
-        private readonly FaceBookManager r_facebookManager;
+        private readonly FaceBookManager r_FacebookManager;
         private const String k_AppID = "1828145884290754";
+        private eMenuItem m_SelectedItem;
 
         public MainForm()
         {
             InitializeComponent();
-            r_facebookManager = new FaceBookManager(k_AppID);
+            r_FacebookManager = new FaceBookManager(k_AppID);
             FacebookService.s_CollectionLimit = 25;
             CustomizeButtons();
             makePictureBoxCircle(pictureBoxProfile);
@@ -48,9 +49,9 @@ namespace BasicFacebookFeatures
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText("design.patterns");
+            Clipboard.SetText("design.patterns");//todo ask guy
 
-            if (r_facebookManager.LoginResult == null)
+            if (r_FacebookManager.LoginResult == null)
             {
                 login();
             }
@@ -58,16 +59,23 @@ namespace BasicFacebookFeatures
 
         private void login()
         {
-            r_facebookManager.Login();
-
-            if (string.IsNullOrEmpty(r_facebookManager.LoginResult.ErrorMessage))
+            try
             {
-                buttonLogin.Text = $"Logged in as {r_facebookManager.LoginResult.LoggedInUser.Name}";
-                buttonLogin.BackColor = Color.LightGreen;
-                pictureBoxProfile.ImageLocation = r_facebookManager.LoginResult.LoggedInUser.PictureNormalURL;
-                buttonLogin.Enabled = false;
-                buttonLogout.Enabled = true;
-                r_facebookManager.LoggedInUser = r_facebookManager.LoginResult.LoggedInUser;
+                r_FacebookManager.Login();
+
+                if (string.IsNullOrEmpty(r_FacebookManager.LoginResult.ErrorMessage))
+                {
+                    buttonLogin.Text = $"Logged in as {r_FacebookManager.LoginResult.LoggedInUser.Name}";
+                    buttonLogin.BackColor = Color.LightGreen;
+                    pictureBoxProfile.ImageLocation = r_FacebookManager.LoginResult.LoggedInUser.PictureNormalURL;
+                    buttonLogin.Enabled = false;
+                    buttonLogout.Enabled = true;
+                    r_FacebookManager.LoggedInUser = r_FacebookManager.LoginResult.LoggedInUser;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -76,14 +84,9 @@ namespace BasicFacebookFeatures
             FacebookService.LogoutWithUI();
             buttonLogin.Text = "Login";
             buttonLogin.BackColor = buttonLogout.BackColor;
-            r_facebookManager.LoginResult = null;
+            r_FacebookManager.LoginResult = null;
             buttonLogin.Enabled = true;
             buttonLogout.Enabled = false;
-        }
-
-        private void listBoxPageLikes_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //Page selectedPage = listBoxPageLikes.SelectedItem as Page;
         }
 
         private void buttonGeographicProximity_Click(object sender, EventArgs e)
@@ -106,11 +109,11 @@ namespace BasicFacebookFeatures
 
         private List<string> GetFriendsName()
         {
-            if (r_facebookManager.LoggedInUser != null)
+            if (r_FacebookManager.LoggedInUser != null)
             {
                 List<string> friendsName = GetFriendsName();
 
-                foreach (User friend in r_facebookManager.LoggedInUser.Friends)
+                foreach (User friend in r_FacebookManager.LoggedInUser.Friends)
                 {
                     friendsName.Add(friend.Name);
                 }
@@ -123,38 +126,83 @@ namespace BasicFacebookFeatures
 
         private void albumsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            m_SelectedItem = eMenuItem.Albums;
             comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_facebookManager.LoggedInUser.Albums;
+            comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.Albums;
         }
 
         private void pagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            m_SelectedItem = eMenuItem.Pages;
             comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_facebookManager.LoggedInUser.LikedPages;
+            comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.LikedPages;
         }
 
         private void groupsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            m_SelectedItem = eMenuItem.Groups;
             comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_facebookManager.LoggedInUser.Groups;
+            comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.Groups;
         }
 
         private void wallPostsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            m_SelectedItem = eMenuItem.WallPosts;
             comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_facebookManager.LoggedInUser.WallPosts;
+            comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.WallPosts;
         }
 
         private void buttonPost_Click(object sender, EventArgs e)
         {
             try
             {
-                Status postedStatus = r_facebookManager.LoggedInUser.PostStatus(richTextBoxStatus.Text);
+                Status postedStatus = r_FacebookManager.LoggedInUser.PostStatus(richTextBoxStatus.Text);
                 MessageBox.Show("Status Posted! ID: " + postedStatus.Id);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void comboBoxFacebookItems_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string imageUrl;
+
+            switch (m_SelectedItem)
+            {
+                case eMenuItem.Albums:
+                    imageUrl = (comboBoxFacebookItems.SelectedItem as Album).PictureAlbumURL;
+                    break;
+                case eMenuItem.Pages:
+                    imageUrl = (comboBoxFacebookItems.SelectedItem as Page).PictureNormalURL;
+                    break;
+                case eMenuItem.Groups:
+                    imageUrl = (comboBoxFacebookItems.SelectedItem as Group).PictureNormalURL;
+                    break;
+                //case eMenuItem.WallPosts:
+                //    imageUrl = (comboBoxFacebookItems.SelectedItem as w).PictureAlbumURL;
+                //    break;
+                case eMenuItem.FriendsByMyLocation:
+                    imageUrl = (comboBoxFacebookItems.SelectedItem as User).PictureNormalURL;
+                    break;
+                default:
+                    imageUrl = null;    
+                    break;
+            }
+
+            displaySelectedItem(imageUrl);
+        }
+
+        private void displaySelectedItem(string i_ImageUrl)
+        {
+            if (!string.IsNullOrEmpty(i_ImageUrl))
+            {
+                pictureBoxFacebookItem.LoadAsync(i_ImageUrl);
+            }
+            else
+            {
+                pictureBoxFacebookItem.Image = pictureBoxFacebookItem.ErrorImage;
             }
         }
     }
