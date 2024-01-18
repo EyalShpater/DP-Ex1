@@ -172,7 +172,10 @@ namespace BasicFacebookFeatures
             switch (m_SelectedItem)
             {
                 case eMenuItem.Albums:
-                    imageUrl = (comboBoxFacebookItems.SelectedItem as Album).PictureAlbumURL;
+                    Album selectedAlbum = comboBoxFacebookItems.SelectedItem as Album;
+                    imageUrl = selectedAlbum?.PictureAlbumURL;
+                    chartLikesByMonth.Enabled = true;
+                    LikesForPhotos.DisplayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);
                     break;
                 case eMenuItem.Pages:
                     imageUrl = (comboBoxFacebookItems.SelectedItem as Page).PictureNormalURL;

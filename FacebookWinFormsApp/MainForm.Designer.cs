@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.panelTop = new System.Windows.Forms.Panel();
             this.labelHeader = new System.Windows.Forms.Label();
             this.buttonLogout = new System.Windows.Forms.Button();
@@ -46,11 +49,13 @@
             this.pictureBoxFacebookItem = new System.Windows.Forms.PictureBox();
             this.labelFaceBookItems = new System.Windows.Forms.Label();
             this.comboBoxFacebookItems = new System.Windows.Forms.ComboBox();
+            this.chartLikesByMonth = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panelTop.SuspendLayout();
             this.panel2.SuspendLayout();
             this.menuStripLeft.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFacebookItem)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartLikesByMonth)).BeginInit();
             this.SuspendLayout();
             // 
             // panelTop
@@ -237,11 +242,28 @@
             this.comboBoxFacebookItems.TabIndex = 8;
             this.comboBoxFacebookItems.SelectedIndexChanged += new System.EventHandler(this.comboBoxFacebookItems_SelectedIndexChanged);
             // 
+            // chartLikesByMonth
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chartLikesByMonth.ChartAreas.Add(chartArea1);
+            this.chartLikesByMonth.Enabled = false;
+            legend1.Name = "Legend1";
+            this.chartLikesByMonth.Legends.Add(legend1);
+            this.chartLikesByMonth.Location = new System.Drawing.Point(591, 333);
+            this.chartLikesByMonth.Name = "chartLikesByMonth";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartLikesByMonth.Series.Add(series1);
+            this.chartLikesByMonth.Size = new System.Drawing.Size(418, 254);
+            this.chartLikesByMonth.TabIndex = 9;
+            this.chartLikesByMonth.Text = "chartLikesByMonth";
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1062, 656);
+            this.Controls.Add(this.chartLikesByMonth);
             this.Controls.Add(this.comboBoxFacebookItems);
             this.Controls.Add(this.labelFaceBookItems);
             this.Controls.Add(this.pictureBoxFacebookItem);
@@ -261,6 +283,7 @@
             this.menuStripLeft.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFacebookItem)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartLikesByMonth)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -286,5 +309,6 @@
         private System.Windows.Forms.ToolStripMenuItem wallPostsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem friendsByMyLocationToolStripMenuItem;
         private System.Windows.Forms.ComboBox comboBoxFacebookItems;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartLikesByMonth;
     }
 }

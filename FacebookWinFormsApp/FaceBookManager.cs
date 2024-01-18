@@ -60,5 +60,14 @@ namespace BasicFacebookFeatures
 
             return new List<string>();
         }
+        public List<Photo> GetPhotosFromAlbum(Album i_SelectedAlbum)
+        {
+            if (i_SelectedAlbum != null)
+            {
+                return i_SelectedAlbum.Photos.ToList();
+            }
+
+            return new List<Photo>();
+        }
     }
 }
