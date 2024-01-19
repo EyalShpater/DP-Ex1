@@ -156,7 +156,7 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                Status postedStatus = r_FacebookManager.LoggedInUser.PostStatus(richTextBoxStatus.Text);
+                Status postedStatus = r_FacebookManager.LoggedInUser.PostStatus(richTextBoxNewPost.Text);
                 MessageBox.Show("Status Posted! ID: " + postedStatus.Id);
             }
             catch (Exception ex)
@@ -228,6 +228,21 @@ namespace BasicFacebookFeatures
                 }
             }
 
+        }
+
+        private void buttonNextPhoto_Click(object sender, EventArgs e)
+        {
+            displaySelectedItem(r_FacebookManager.CurrentViewingAlbum.GetNextPhotoURL());
+        }
+
+        private void buttonPreviousPhoto_Click(object sender, EventArgs e)
+        {
+            displaySelectedItem(r_FacebookManager.CurrentViewingAlbum.GetPreviousPhotoURL());
+        }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            richTextBoxNewPost.Clear();
         }
     }
 }

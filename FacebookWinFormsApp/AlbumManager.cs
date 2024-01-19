@@ -34,14 +34,15 @@ namespace BasicFacebookFeatures
         {
             m_CurrentImageIndex = (m_CurrentImageIndex + 1) % m_Album.Photos.Count;
 
-            return m_Photos.ElementAt(m_CurrentImageIndex).URL;
+            return m_Photos.ElementAt(m_CurrentImageIndex).PictureNormalURL;
         }
 
         public string GetPreviousPhotoURL()
         {
-            m_CurrentImageIndex = (m_CurrentImageIndex - 1) % m_Album.Photos.Count;
+            m_CurrentImageIndex = m_CurrentImageIndex == 0 ?
+                m_Album.Photos.Count - 1 : m_CurrentImageIndex - 1;
 
-            return m_Photos.ElementAt(m_CurrentImageIndex).URL;
+            return m_Photos.ElementAt(m_CurrentImageIndex).PictureNormalURL;
         }
 
         public void DownloadAlbum(string i_Path)

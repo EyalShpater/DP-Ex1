@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.panelTop = new System.Windows.Forms.Panel();
             this.labelHeader = new System.Windows.Forms.Label();
             this.buttonLogout = new System.Windows.Forms.Button();
@@ -42,7 +42,7 @@
             this.groupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wallPostsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.friendsByMyLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.richTextBoxStatus = new System.Windows.Forms.RichTextBox();
+            this.richTextBoxNewPost = new System.Windows.Forms.RichTextBox();
             this.buttonPost = new System.Windows.Forms.Button();
             this.buttonClear = new System.Windows.Forms.Button();
             this.labelFaceBookItems = new System.Windows.Forms.Label();
@@ -133,7 +133,6 @@
             this.friendsByMyLocationToolStripMenuItem});
             this.menuStripLeft.Location = new System.Drawing.Point(0, 0);
             this.menuStripLeft.Name = "menuStripLeft";
-            this.menuStripLeft.Padding = new System.Windows.Forms.Padding(6, 2, 0, 2);
             this.menuStripLeft.Size = new System.Drawing.Size(396, 857);
             this.menuStripLeft.TabIndex = 0;
             this.menuStripLeft.Text = "Coose an action";
@@ -174,13 +173,13 @@
             this.friendsByMyLocationToolStripMenuItem.Size = new System.Drawing.Size(389, 54);
             this.friendsByMyLocationToolStripMenuItem.Text = "Frinds By My Location";
             // 
-            // richTextBoxStatus
+            // richTextBoxNewPost
             // 
-            this.richTextBoxStatus.Location = new System.Drawing.Point(639, 173);
-            this.richTextBoxStatus.Name = "richTextBoxStatus";
-            this.richTextBoxStatus.Size = new System.Drawing.Size(853, 195);
-            this.richTextBoxStatus.TabIndex = 2;
-            this.richTextBoxStatus.Text = "";
+            this.richTextBoxNewPost.Location = new System.Drawing.Point(639, 173);
+            this.richTextBoxNewPost.Name = "richTextBoxNewPost";
+            this.richTextBoxNewPost.Size = new System.Drawing.Size(853, 195);
+            this.richTextBoxNewPost.TabIndex = 2;
+            this.richTextBoxNewPost.Text = "";
             // 
             // buttonPost
             // 
@@ -200,6 +199,7 @@
             this.buttonClear.TabIndex = 3;
             this.buttonClear.Text = "Clear";
             this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
             // labelFaceBookItems
             // 
@@ -220,24 +220,28 @@
             // 
             // chartLikesByMonth
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chartLikesByMonth.ChartAreas.Add(chartArea1);
+            chartArea2.Name = "ChartArea1";
+            this.chartLikesByMonth.ChartAreas.Add(chartArea2);
             this.chartLikesByMonth.Enabled = false;
-            legend1.Name = "Legend1";
-            this.chartLikesByMonth.Legends.Add(legend1);
+            legend2.Name = "Legend1";
+            this.chartLikesByMonth.Legends.Add(legend2);
             this.chartLikesByMonth.Location = new System.Drawing.Point(886, 520);
             this.chartLikesByMonth.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chartLikesByMonth.Name = "chartLikesByMonth";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chartLikesByMonth.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chartLikesByMonth.Series.Add(series2);
             this.chartLikesByMonth.Size = new System.Drawing.Size(627, 397);
             this.chartLikesByMonth.TabIndex = 9;
             this.chartLikesByMonth.Text = "chartLikesByMonth";
             // 
             // buttonDownloadAlbum
             // 
+            this.buttonDownloadAlbum.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonDownloadAlbum.AutoSize = true;
             this.buttonDownloadAlbum.BackgroundImage = global::BasicFacebookFeatures.Properties.Resources.download;
             this.buttonDownloadAlbum.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonDownloadAlbum.Location = new System.Drawing.Point(745, 518);
@@ -256,6 +260,7 @@
             this.buttonPreviousPhoto.Size = new System.Drawing.Size(75, 34);
             this.buttonPreviousPhoto.TabIndex = 10;
             this.buttonPreviousPhoto.UseVisualStyleBackColor = true;
+            this.buttonPreviousPhoto.Click += new System.EventHandler(this.buttonPreviousPhoto_Click);
             // 
             // buttonNextPhoto
             // 
@@ -266,12 +271,14 @@
             this.buttonNextPhoto.Size = new System.Drawing.Size(75, 34);
             this.buttonNextPhoto.TabIndex = 10;
             this.buttonNextPhoto.UseVisualStyleBackColor = true;
+            this.buttonNextPhoto.Click += new System.EventHandler(this.buttonNextPhoto_Click);
             // 
             // pictureBoxFacebookItem
             // 
             this.pictureBoxFacebookItem.Location = new System.Drawing.Point(423, 581);
             this.pictureBoxFacebookItem.Name = "pictureBoxFacebookItem";
             this.pictureBoxFacebookItem.Size = new System.Drawing.Size(390, 336);
+            this.pictureBoxFacebookItem.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxFacebookItem.TabIndex = 6;
             this.pictureBoxFacebookItem.TabStop = false;
             // 
@@ -298,7 +305,7 @@
             this.Controls.Add(this.pictureBoxProfile);
             this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.buttonPost);
-            this.Controls.Add(this.richTextBoxStatus);
+            this.Controls.Add(this.richTextBoxNewPost);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panelTop);
             this.Name = "MainForm";
@@ -327,7 +334,7 @@
         private System.Windows.Forms.ToolStripMenuItem albumsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pagesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem groupsToolStripMenuItem;
-        private System.Windows.Forms.RichTextBox richTextBoxStatus;
+        private System.Windows.Forms.RichTextBox richTextBoxNewPost;
         private System.Windows.Forms.Button buttonPost;
         private System.Windows.Forms.Button buttonClear;
         private System.Windows.Forms.PictureBox pictureBoxProfile;
