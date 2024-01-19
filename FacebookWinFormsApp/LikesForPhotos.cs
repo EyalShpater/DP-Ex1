@@ -24,8 +24,8 @@ namespace BasicFacebookFeatures
                 .OrderBy(item => item.Month)
                 .ToList();
 
-            // Add data to the chart
             Series series = io_ChartLikesByMonth.Series.Add($"{i_Album.Name} - Likes by Month");
+
             foreach (object dataPoint in likesByMonth)
             {
                 int month = (int)dataPoint.GetType().GetProperty("Month").GetValue(dataPoint);
@@ -45,5 +45,4 @@ namespace BasicFacebookFeatures
             return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(monthNumber);
         }
     }
-
 }
