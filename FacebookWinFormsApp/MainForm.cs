@@ -49,7 +49,7 @@ namespace BasicFacebookFeatures
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText("design.patterns");//todo ask guy
+            Clipboard.SetText("design.patterns");
 
             if (r_FacebookManager.LoginResult == null)
             {
@@ -87,11 +87,6 @@ namespace BasicFacebookFeatures
             r_FacebookManager.LoginResult = null;
             buttonLogin.Enabled = true;
             buttonLogout.Enabled = false;
-        }
-
-        private void buttonGeographicProximity_Click(object sender, EventArgs e)
-        {
-            fetchAndDisplayData();
         }
 
         private void fetchAndDisplayData()
@@ -184,9 +179,6 @@ namespace BasicFacebookFeatures
                 case eMenuItem.Groups:
                     imageUrl = (comboBoxFacebookItems.SelectedItem as Group).PictureNormalURL;
                     break;
-                //case eMenuItem.WallPosts:
-                //    imageUrl = (comboBoxFacebookItems.SelectedItem as w).PictureAlbumURL;
-                //    break;
                 case eMenuItem.FriendsByMyLocation:
                     imageUrl = (comboBoxFacebookItems.SelectedItem as User).PictureNormalURL;
                     break;
