@@ -17,7 +17,7 @@ namespace BasicFacebookFeatures
     {
         private readonly FaceBookManager r_FacebookManager;
         private const String k_AppID = "1828145884290754";
-        private eMenuItem m_SelectedItem;
+        private eMenuItem m_SelectedMenuItem;
 
         public MainForm()
         {
@@ -126,28 +126,28 @@ namespace BasicFacebookFeatures
 
         private void albumsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_SelectedItem = eMenuItem.Albums;
+            m_SelectedMenuItem = eMenuItem.Albums;
             comboBoxFacebookItems.DisplayMember = "Name";
             comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.Albums;
         }
 
         private void pagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_SelectedItem = eMenuItem.Pages;
+            m_SelectedMenuItem = eMenuItem.Pages;
             comboBoxFacebookItems.DisplayMember = "Name";
             comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.LikedPages;
         }
 
         private void groupsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_SelectedItem = eMenuItem.Groups;
+            m_SelectedMenuItem = eMenuItem.Groups;
             comboBoxFacebookItems.DisplayMember = "Name";
             comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.Groups;
         }
 
         private void wallPostsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_SelectedItem = eMenuItem.WallPosts;
+            m_SelectedMenuItem = eMenuItem.WallPosts;
             comboBoxFacebookItems.DisplayMember = "Name";
             comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.WallPosts;
         }
@@ -169,11 +169,12 @@ namespace BasicFacebookFeatures
         {
             string imageUrl;
 
-            switch (m_SelectedItem)
+            switch (m_SelectedMenuItem)
             {
                 case eMenuItem.Albums:
                     Album selectedAlbum = comboBoxFacebookItems.SelectedItem as Album;
-                    imageUrl = selectedAlbum?.PictureAlbumURL;
+                    r_FacebookManager.CurrentViewingAlbum = new AlbumManager(comboBoxFacebookItems.SelectedItem as Album);
+                    imageUrl = r_FacebookManager.CurrentViewingAlbum.GetPictureAlbumURL();
                     chartLikesByMonth.Enabled = true;
                     LikesForPhotos.DisplayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);
                     break;
@@ -207,6 +208,26 @@ namespace BasicFacebookFeatures
             {
                 pictureBoxFacebookItem.Image = pictureBoxFacebookItem.ErrorImage;
             }
+        }
+
+        private void buttonDownloadAlbum_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+            {
+                DialogResult result = folderDialog.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
+                {
+                    MessageBox.Show("Selected path: " + folderDialog.SelectedPath, "Path Selected");
+                    r_FacebookManager.CurrentViewingAlbum.DownloadAlbum(folderDialog.SelectedPath);
+                    MessageBox.Show("Download has successfully finished!");
+                }
+                else
+                {
+                    MessageBox.Show("An Error Has Occured!");
+                }
+            }
+
         }
     }
 }

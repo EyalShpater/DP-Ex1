@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -24,6 +25,11 @@ namespace BasicFacebookFeatures
         }
 
 
+        public string GetPictureAlbumURL()
+        {
+            return m_Album.PictureAlbumURL;
+        }
+
         public string GetNextPhotoURL()
         {
             m_CurrentImageIndex = (m_CurrentImageIndex + 1) % m_Album.Photos.Count;
@@ -41,18 +47,20 @@ namespace BasicFacebookFeatures
         public void DownloadAlbum(string i_Path)
         {
             int index = 1;
-
+            string albumPath = Path.Combine(i_Path, m_Album.Name);
+            
+            Directory.CreateDirectory(albumPath);
             foreach (Photo photo in m_Photos)
             {
                 string fileName = $"{index}_{photo.Name}.jpg";
 
                 try
                 {
-                    downloadPhoto(fileName, i_Path);
+                    downloadPhoto(photo.PictureNormalURL, Path.Combine(albumPath, fileName));
                 }
                 catch (Exception ignored) 
-                { 
-
+                {
+                    MessageBox.Show(ignored.Message);
                 }
             
                 index++;

@@ -16,6 +16,7 @@ namespace BasicFacebookFeatures
         private readonly String r_AppID;
         public User LoggedInUser { get; set; }
         public LoginResult LoginResult { get; set; }
+        public AlbumManager CurrentViewingAlbum { get; set; }
 
         public FaceBookManager(String i_AppID)
         {
