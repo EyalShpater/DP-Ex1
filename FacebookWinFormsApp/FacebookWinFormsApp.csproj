@@ -90,8 +90,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlbumManager.cs" />
     <Compile Include="Chart.cs" />
     <Compile Include="eMenuItem.cs" />
+    <Compile Include="eSortOption.cs" />
     <Compile Include="FaceBookManager.cs" />
     <Compile Include="LikesForPhotos.cs" />
     <Compile Include="MainForm.cs">
