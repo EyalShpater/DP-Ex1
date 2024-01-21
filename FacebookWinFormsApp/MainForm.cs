@@ -115,6 +115,7 @@ namespace BasicFacebookFeatures
             switch (m_SelectedMenuItem)
             {
                 case eMenuItem.Albums:
+                    r_FacebookManager.CurrentViewingAlbum = new AlbumManager(comboBoxFacebookItems.SelectedItem as Album); //todo: to think how to do it better
                     imageUrl = (comboBoxFacebookItems.SelectedItem as Album).PictureAlbumURL;
                     break;
                 case eMenuItem.Pages:
@@ -159,7 +160,6 @@ namespace BasicFacebookFeatures
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
                 {
-                    MessageBox.Show("Selected path: " + folderDialog.SelectedPath, "Path Selected");
                     r_FacebookManager.CurrentViewingAlbum.DownloadAlbum(folderDialog.SelectedPath);
                     MessageBox.Show("Download has successfully finished!");
                 }
