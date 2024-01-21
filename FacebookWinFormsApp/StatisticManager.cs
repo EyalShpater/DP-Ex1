@@ -9,9 +9,9 @@ namespace BasicFacebookFeatures
 {
     internal class StatisticManager
     {
-        internal string findTheMostLikedImageInAlbum(AlbumManager currentViewingAlbum)
+        internal string findTheMostLikedImageInAlbum(Album currentViewingAlbum)
         {
-            Photo mostLovedPhoto = findMostLovedPhoto(currentViewingAlbum.Album);
+            Photo mostLovedPhoto = findMostLovedPhoto(currentViewingAlbum);
 
             if (mostLovedPhoto != null)
             {
