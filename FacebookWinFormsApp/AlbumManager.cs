@@ -82,6 +82,8 @@ namespace BasicFacebookFeatures
                     m_Photos.OrderBy(photo => photo.CreatedTime);
                     break;
             }
+
+            m_CurrentImageIndex = 0;
         }
 
         private void downloadPhoto(string i_PhotoURL, string i_Destination)

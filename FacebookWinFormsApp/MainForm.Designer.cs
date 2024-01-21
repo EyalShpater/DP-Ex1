@@ -70,6 +70,7 @@
             this.buttonPost = new System.Windows.Forms.Button();
             this.richTextBoxNewPost = new System.Windows.Forms.RichTextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.comboBoxSortBy = new System.Windows.Forms.ComboBox();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.buttonHamburger)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartLikesByMonth)).BeginInit();
@@ -450,6 +451,7 @@
             // 
             // panelPosts
             // 
+            this.panelPosts.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.panelPosts.Controls.Add(this.listBoxPosts);
             this.panelPosts.Location = new System.Drawing.Point(423, 444);
             this.panelPosts.Name = "panelPosts";
@@ -469,6 +471,7 @@
             // 
             // panelProilePictureAndWritePost
             // 
+            this.panelProilePictureAndWritePost.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.panelProilePictureAndWritePost.Controls.Add(this.pictureBoxProfile);
             this.panelProilePictureAndWritePost.Controls.Add(this.buttonClear);
             this.panelProilePictureAndWritePost.Controls.Add(this.buttonPost);
@@ -519,13 +522,26 @@
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(301, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // comboBoxSortBy
+            // 
+            this.comboBoxSortBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSortBy.FormattingEnabled = true;
+            this.comboBoxSortBy.Location = new System.Drawing.Point(423, 963);
+            this.comboBoxSortBy.Name = "comboBoxSortBy";
+            this.comboBoxSortBy.Size = new System.Drawing.Size(391, 33);
+            this.comboBoxSortBy.TabIndex = 1;
+            this.comboBoxSortBy.Tag = "SortByComboBox";
+            this.comboBoxSortBy.Visible = false;
+            this.comboBoxSortBy.SelectedIndexChanged += new System.EventHandler(this.comboBoxSortBy_SelectedIndexChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1593, 1025);
+            this.Controls.Add(this.comboBoxSortBy);
             this.Controls.Add(this.mostLikedPic);
             this.Controls.Add(this.comboBoxForAlbum);
             this.Controls.Add(this.mostLikedPictureLabel);
@@ -599,5 +615,6 @@
         private System.Windows.Forms.Button buttonPost;
         private System.Windows.Forms.RichTextBox richTextBoxNewPost;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ComboBox comboBoxSortBy;
     }
 }

@@ -190,15 +190,23 @@ namespace BasicFacebookFeatures
 
         private void albumsButton_Click(object sender, EventArgs e)
         {
-            showMenuItemComponents(eFormControlTag.Pagination, eFormControlTag.Download, eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox);
+            showMenuItemComponents(eFormControlTag.Pagination, eFormControlTag.Download, 
+                eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox, eFormControlTag.SortByComboBox);
             m_SelectedMenuItem = eMenuItem.Albums;
-            comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_FacebookManager.GetAlbums();
+            setAlbumComboBoxes();
 
             if (comboBoxFacebookItems.Items.Count == 0)
             {
                 MessageBox.Show("No albums to show :(");
             }
+        }
+
+        private void setAlbumComboBoxes()
+        {
+            comboBoxFacebookItems.DisplayMember = "Name";
+            comboBoxFacebookItems.DataSource = r_FacebookManager.GetAlbums();
+
+            comboBoxSortBy.DataSource = Enum.GetValues(typeof(eSortOption));
         }
 
         private void showMenuItemComponents(params eFormControlTag[] i_TagValues)
@@ -334,6 +342,15 @@ namespace BasicFacebookFeatures
             }
 
             return isMatch;
+        }
+
+        private void comboBoxSortBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxSortBy.SelectedItem is eSortOption sortOption)
+            {
+                r_FacebookManager.CurrentViewingAlbum.SortAlbum(sortOption);
+          
+            } 
         }
     }
 }

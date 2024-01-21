@@ -16,6 +16,7 @@ namespace BasicFacebookFeatures
         TopPictureLabel,
         SmallPictureBox,
         TopCenterComboBox,
+        SortByComboBox,
         PostsPanel,
         Header,
         Profile,
