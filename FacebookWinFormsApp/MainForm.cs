@@ -18,7 +18,8 @@ namespace BasicFacebookFeatures
     {
         private readonly FaceBookManager r_FacebookManager;
         private const string k_AppID = "1828145884290754";
-        private eMenuItem m_SelectedMenuItem;
+        private static readonly eFormControlTag[] sr_DefaultFormComponents = { eFormControlTag.Header, eFormControlTag.Profile, eFormControlTag.Menu };
+    private eMenuItem m_SelectedMenuItem;
         private bool menuExpand = true;
         private StatisticManager m_StatisticManager;
 
@@ -189,9 +190,7 @@ namespace BasicFacebookFeatures
 
         private void albumsButton_Click(object sender, EventArgs e)
         {
-            changeStatisticsComponentsVisibilty(false);
-            changeAlbumsDownloadVisibility(true);
-            changeChartVisibility(false);
+            showMenuItemComponents(eFormControlTag.Pagination, eFormControlTag.Download, eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox);
             m_SelectedMenuItem = eMenuItem.Albums;
             comboBoxFacebookItems.DisplayMember = "Name";
             comboBoxFacebookItems.DataSource = r_FacebookManager.GetAlbums();
@@ -202,25 +201,28 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void changeAlbumsDownloadVisibility(bool i_Visible)
+        private void showMenuItemComponents(params eFormControlTag[] i_TagValues)
         {
-            comboBoxFacebookItems.Visible = i_Visible;
-            buttonDownloadAlbum.Visible = i_Visible;
-            pictureBoxFacebookItem.Visible = i_Visible;
-            buttonPreviousPhoto.Visible = i_Visible;
-            buttonNextPhoto.Visible = i_Visible;
-        }
-        private void changeChartVisibility(bool i_Visible)
-        {
-            chartLikesByMonth.Visible = i_Visible;
+            List<eFormControlTag> tagValues = new List<eFormControlTag>(i_TagValues);
+
+            tagValues.AddRange(sr_DefaultFormComponents);
+            foreach (Control control in Controls)
+            {
+                if (control.Tag != null && isControlMatchingTag(control.Tag.ToString(), tagValues.ToArray()))
+                {
+                    control.Visible = true;
+                }
+                else
+                {
+                    control.Visible = false;
+                }
+            }
         }
 
         private void pagesButton_Click(object sender, EventArgs e)
         {
-            changeStatisticsComponentsVisibilty(false);
             m_SelectedMenuItem = eMenuItem.Pages;
-            changeAlbumsDownloadVisibility(true);
-            changeChartVisibility(false);
+            showMenuItemComponents(eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox);
             comboBoxFacebookItems.DisplayMember = "Name";
             comboBoxFacebookItems.DataSource = r_FacebookManager.GetLikedPages();
 
@@ -233,6 +235,7 @@ namespace BasicFacebookFeatures
         private void groupsButton_Click(object sender, EventArgs e)
         {
             m_SelectedMenuItem = eMenuItem.Groups;
+            showMenuItemComponents(eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox);
             comboBoxFacebookItems.DisplayMember = "Name";
             comboBoxFacebookItems.DataSource = r_FacebookManager.GetGroups();
 
@@ -240,38 +243,22 @@ namespace BasicFacebookFeatures
             {
                 MessageBox.Show("No groups to show :(");
             }
-
-            changeStatisticsComponentsVisibilty(false);
-            changeAlbumsDownloadVisibility(true);
-            changeChartVisibility(false);
         }
 
         private void statisticsButton_Click(object sender, EventArgs e)
         {
             m_SelectedMenuItem = eMenuItem.Statistics;
+            showMenuItemComponents(eFormControlTag.MainChart, eFormControlTag.TopPictureLabel, 
+                eFormControlTag.SmallPictureBox, eFormControlTag.TopCenterComboBox);
             comboBoxForAlbum.DisplayMember = "Name";
             comboBoxForAlbum.DataSource = r_FacebookManager.GetAlbums();
-
-            changeAlbumsDownloadVisibility(false);
-            changeChartVisibility(true);
-            changeStatisticsComponentsVisibilty(true);
-        }
-
-        private void changeStatisticsComponentsVisibilty(bool i_Visible)
-        {
-            comboBoxForAlbum.Visible = i_Visible;
-            mostLikedPictureLabel.Visible = i_Visible;
-            mostLikedPic.Visible = i_Visible;
         }
 
         private void postsButton_Click(object sender, EventArgs e)
         {
             m_SelectedMenuItem = eMenuItem.WallPosts;
-            panelPosts.Visible = true;
+            showMenuItemComponents(eFormControlTag.PostsPanel);
             fetchPosts();
-            changeStatisticsComponentsVisibilty(false);
-            changeAlbumsDownloadVisibility(true);
-            changeChartVisibility(false);
         }
 
         private void comboBoxForAlbum_SelectedIndexChanged(object sender, EventArgs e)
@@ -329,6 +316,24 @@ namespace BasicFacebookFeatures
             System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
             path.AddEllipse(0, 0, i_PictureBox.Width, i_PictureBox.Height);
             i_PictureBox.Region = new Region(path);
+        }
+
+        private bool isControlMatchingTag(string i_ControlTag, params eFormControlTag[] i_TagValues)
+        {
+            bool isMatch = false;
+
+            if (i_ControlTag != null)
+            {
+                foreach (eFormControlTag tagValue in i_TagValues)
+                {
+                    if (string.Equals(i_ControlTag, tagValue.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        isMatch = true;
+                    }
+                }
+            }
+
+            return isMatch;
         }
     }
 }

@@ -94,6 +94,7 @@
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(1593, 83);
             this.panelTop.TabIndex = 0;
+            this.panelTop.Tag = "Header";
             // 
             // buttonHamburger
             // 
@@ -148,6 +149,7 @@
             this.comboBoxFacebookItems.Name = "comboBoxFacebookItems";
             this.comboBoxFacebookItems.Size = new System.Drawing.Size(316, 33);
             this.comboBoxFacebookItems.TabIndex = 8;
+            this.comboBoxFacebookItems.Tag = "MainComboBox";
             this.comboBoxFacebookItems.Visible = false;
             this.comboBoxFacebookItems.SelectedIndexChanged += new System.EventHandler(this.comboBoxFacebookItems_SelectedIndexChanged);
             // 
@@ -167,6 +169,7 @@
             this.chartLikesByMonth.Series.Add(series4);
             this.chartLikesByMonth.Size = new System.Drawing.Size(627, 397);
             this.chartLikesByMonth.TabIndex = 9;
+            this.chartLikesByMonth.Tag = "MainChart";
             this.chartLikesByMonth.Text = "chartLikesByMonth";
             this.chartLikesByMonth.Visible = false;
             // 
@@ -178,6 +181,7 @@
             this.buttonDownloadAlbum.Name = "buttonDownloadAlbum";
             this.buttonDownloadAlbum.Size = new System.Drawing.Size(68, 47);
             this.buttonDownloadAlbum.TabIndex = 11;
+            this.buttonDownloadAlbum.Tag = "Download";
             this.buttonDownloadAlbum.UseVisualStyleBackColor = true;
             this.buttonDownloadAlbum.Visible = false;
             this.buttonDownloadAlbum.Click += new System.EventHandler(this.buttonDownloadAlbum_Click);
@@ -190,6 +194,7 @@
             this.buttonPreviousPhoto.Name = "buttonPreviousPhoto";
             this.buttonPreviousPhoto.Size = new System.Drawing.Size(75, 34);
             this.buttonPreviousPhoto.TabIndex = 10;
+            this.buttonPreviousPhoto.Tag = "Pagination";
             this.buttonPreviousPhoto.UseVisualStyleBackColor = true;
             this.buttonPreviousPhoto.Visible = false;
             this.buttonPreviousPhoto.Click += new System.EventHandler(this.buttonPreviousPhoto_Click);
@@ -202,6 +207,7 @@
             this.buttonNextPhoto.Name = "buttonNextPhoto";
             this.buttonNextPhoto.Size = new System.Drawing.Size(75, 34);
             this.buttonNextPhoto.TabIndex = 10;
+            this.buttonNextPhoto.Tag = "Pagination";
             this.buttonNextPhoto.UseVisualStyleBackColor = true;
             this.buttonNextPhoto.Visible = false;
             this.buttonNextPhoto.Click += new System.EventHandler(this.buttonNextPhoto_Click);
@@ -214,6 +220,7 @@
             this.pictureBoxFacebookItem.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxFacebookItem.TabIndex = 6;
             this.pictureBoxFacebookItem.TabStop = false;
+            this.pictureBoxFacebookItem.Tag = "MainPictureBox";
             this.pictureBoxFacebookItem.Visible = false;
             // 
             // miniToolStrip
@@ -302,6 +309,7 @@
             this.menu.Name = "menu";
             this.menu.Size = new System.Drawing.Size(344, 942);
             this.menu.TabIndex = 12;
+            this.menu.Tag = "Menu";
             // 
             // albumsButton
             // 
@@ -412,6 +420,7 @@
             this.mostLikedPictureLabel.Name = "mostLikedPictureLabel";
             this.mostLikedPictureLabel.Size = new System.Drawing.Size(216, 32);
             this.mostLikedPictureLabel.TabIndex = 28;
+            this.mostLikedPictureLabel.Tag = "TopPictureLabel";
             this.mostLikedPictureLabel.Text = "Most Liked Picture:";
             this.mostLikedPictureLabel.Visible = false;
             // 
@@ -423,6 +432,7 @@
             this.comboBoxForAlbum.Name = "comboBoxForAlbum";
             this.comboBoxForAlbum.Size = new System.Drawing.Size(349, 33);
             this.comboBoxForAlbum.TabIndex = 29;
+            this.comboBoxForAlbum.Tag = "TopCenterComboBox";
             this.comboBoxForAlbum.Visible = false;
             this.comboBoxForAlbum.SelectedIndexChanged += new System.EventHandler(this.comboBoxForAlbum_SelectedIndexChanged);
             // 
@@ -434,6 +444,7 @@
             this.mostLikedPic.Size = new System.Drawing.Size(267, 227);
             this.mostLikedPic.TabIndex = 30;
             this.mostLikedPic.TabStop = false;
+            this.mostLikedPic.Tag = "SmallPictureBox";
             this.mostLikedPic.Visible = false;
             // 
             // panelPosts
@@ -443,6 +454,7 @@
             this.panelPosts.Name = "panelPosts";
             this.panelPosts.Size = new System.Drawing.Size(1135, 513);
             this.panelPosts.TabIndex = 32;
+            this.panelPosts.Tag = "PostsPanel";
             this.panelPosts.Visible = false;
             // 
             // listBoxPosts
@@ -464,6 +476,7 @@
             this.panelProilePictureAndWritePost.Name = "panelProilePictureAndWritePost";
             this.panelProilePictureAndWritePost.Size = new System.Drawing.Size(1135, 319);
             this.panelProilePictureAndWritePost.TabIndex = 33;
+            this.panelProilePictureAndWritePost.Tag = "Profile";
             // 
             // pictureBoxProfile
             // 
@@ -506,7 +519,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1593, 1025);
-            this.Controls.Add(this.panelPosts);
             this.Controls.Add(this.mostLikedPic);
             this.Controls.Add(this.comboBoxForAlbum);
             this.Controls.Add(this.mostLikedPictureLabel);
@@ -520,6 +532,7 @@
             this.Controls.Add(this.pictureBoxFacebookItem);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelProilePictureAndWritePost);
+            this.Controls.Add(this.panelPosts);
             this.IsMdiContainer = true;
             this.Name = "MainForm";
             this.Text = "MainForm";
