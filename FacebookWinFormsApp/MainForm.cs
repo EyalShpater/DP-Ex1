@@ -115,7 +115,6 @@ namespace BasicFacebookFeatures
             switch (m_SelectedMenuItem)
             {
                 case eMenuItem.Albums:
-                    ;
                     imageUrl = (comboBoxFacebookItems.SelectedItem as Album).PictureAlbumURL;
                     break;
                 case eMenuItem.Pages:
@@ -279,15 +278,13 @@ namespace BasicFacebookFeatures
 
         private void postsButton_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Status postedStatus = r_FacebookManager.LoggedInUser.PostStatus(richTextBoxNewPost.Text);
-                MessageBox.Show("Status Posted! ID: " + postedStatus.Id);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
+            m_SelectedMenuItem = eMenuItem.WallPosts;
+            comboBoxFacebookItems.DisplayMember = "Name";
+            comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.Posts;
+
+            changeStatisticsComponentsVisibilty(false);
+            changeAlbumsDownloadVisibility(true);
+            changeChartVisibility(false);
         }
 
         private void ComboBoxForAlbum_SelectedIndexChanged(object sender, EventArgs e)
@@ -300,7 +297,7 @@ namespace BasicFacebookFeatures
                 chartLikesByMonth.Enabled = true;
                 LikesForPhotos.DisplayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);
 
-                string mostLikedImageUrl = m_StatisticManager.findTheMostLikedImageInAlbum(r_FacebookManager.CurrentViewingAlbum);
+                string mostLikedImageUrl = m_StatisticManager.findTheMostLikedImageInAlbum(selectedAlbum);
 
                 if (!string.IsNullOrEmpty(mostLikedImageUrl))
                 {
