@@ -13,12 +13,12 @@ namespace BasicFacebookFeatures
 {
     public class FaceBookManager
     {
-        private readonly String r_AppID;
+        private readonly string r_AppID;
         private User m_LoggedInUser;
         public LoginResult LoginResult { get; set; }
-        public AlbumManager CurrentViewingAlbum { get; set; }
+        public AlbumManager CurrentViewingAlbum { get; private set; }
 
-        public FaceBookManager(String i_AppID)
+        public FaceBookManager(string i_AppID)
         {
             r_AppID = i_AppID;
         }
@@ -81,6 +81,11 @@ namespace BasicFacebookFeatures
             Status postedStatus = m_LoggedInUser.PostStatus(i_Status);
 
             return postedStatus.Id;
+        }
+
+        public void SetCurrentViewingAlbum(Album i_Album)
+        {
+            CurrentViewingAlbum = new AlbumManager(i_Album);
         }
 
         public FacebookObjectCollection<Album> GetAlbums()

@@ -19,7 +19,7 @@ namespace BasicFacebookFeatures
         private readonly FaceBookManager r_FacebookManager;
         private const string k_AppID = "1828145884290754";
         private static readonly eFormControlTag[] sr_DefaultFormComponents = { eFormControlTag.Header, eFormControlTag.Profile, eFormControlTag.Menu };
-    private eMenuItem m_SelectedMenuItem;
+        private eMenuItem m_SelectedMenuItem;
         private bool menuExpand = true;
         private StatisticManager m_StatisticManager;
 
@@ -98,7 +98,7 @@ namespace BasicFacebookFeatures
             switch (m_SelectedMenuItem)
             {
                 case eMenuItem.Albums:
-                    r_FacebookManager.CurrentViewingAlbum = new AlbumManager(comboBoxFacebookItems.SelectedItem as Album); //todo: to think how to do it better
+                    r_FacebookManager.SetCurrentViewingAlbum(comboBoxFacebookItems.SelectedItem as Album); //todo: to think how to do it better
                     imageUrl = (comboBoxFacebookItems.SelectedItem as Album).PictureAlbumURL;
                     break;
                 case eMenuItem.Pages:
@@ -265,7 +265,7 @@ namespace BasicFacebookFeatures
         {
             if (comboBoxForAlbum.SelectedItem is Album selectedAlbum)
             {
-                r_FacebookManager.CurrentViewingAlbum = new AlbumManager(selectedAlbum);
+                r_FacebookManager.SetCurrentViewingAlbum(selectedAlbum);
                 string imageUrl = r_FacebookManager.CurrentViewingAlbum.GetPictureAlbumURL();
 
                 chartLikesByMonth.Enabled = true;

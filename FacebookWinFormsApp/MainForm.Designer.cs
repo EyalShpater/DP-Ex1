@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.panelTop = new System.Windows.Forms.Panel();
             this.buttonHamburger = new System.Windows.Forms.PictureBox();
             this.labelHeader = new System.Windows.Forms.Label();
@@ -69,6 +69,7 @@
             this.buttonClear = new System.Windows.Forms.Button();
             this.buttonPost = new System.Windows.Forms.Button();
             this.richTextBoxNewPost = new System.Windows.Forms.RichTextBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.buttonHamburger)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartLikesByMonth)).BeginInit();
@@ -155,18 +156,18 @@
             // 
             // chartLikesByMonth
             // 
-            chartArea4.Name = "ChartArea1";
-            this.chartLikesByMonth.ChartAreas.Add(chartArea4);
+            chartArea5.Name = "ChartArea1";
+            this.chartLikesByMonth.ChartAreas.Add(chartArea5);
             this.chartLikesByMonth.Enabled = false;
-            legend4.Name = "Legend1";
-            this.chartLikesByMonth.Legends.Add(legend4);
+            legend5.Name = "Legend1";
+            this.chartLikesByMonth.Legends.Add(legend5);
             this.chartLikesByMonth.Location = new System.Drawing.Point(884, 520);
             this.chartLikesByMonth.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chartLikesByMonth.Name = "chartLikesByMonth";
-            series4.ChartArea = "ChartArea1";
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            this.chartLikesByMonth.Series.Add(series4);
+            series5.ChartArea = "ChartArea1";
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            this.chartLikesByMonth.Series.Add(series5);
             this.chartLikesByMonth.Size = new System.Drawing.Size(627, 397);
             this.chartLikesByMonth.TabIndex = 9;
             this.chartLikesByMonth.Tag = "MainChart";
@@ -514,6 +515,12 @@
             this.richTextBoxNewPost.TabIndex = 5;
             this.richTextBoxNewPost.Text = "";
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(301, 48);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -591,5 +598,6 @@
         private System.Windows.Forms.Button buttonClear;
         private System.Windows.Forms.Button buttonPost;
         private System.Windows.Forms.RichTextBox richTextBoxNewPost;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
     }
 }
