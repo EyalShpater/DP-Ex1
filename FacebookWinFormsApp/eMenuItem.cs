@@ -14,6 +14,6 @@ namespace BasicFacebookFeatures
         Pages,
         Groups,
         WallPosts,
-        FriendsByMyLocation
+        Statistics
     }
 }
