@@ -14,7 +14,7 @@ namespace BasicFacebookFeatures
     public class FaceBookManager
     {
         private readonly String r_AppID;
-        public User LoggedInUser { get; set; }
+        private User m_LoggedInUser;
         public LoginResult LoginResult { get; set; }
         public AlbumManager CurrentViewingAlbum { get; set; }
 
@@ -43,15 +43,20 @@ namespace BasicFacebookFeatures
                 LoginResult = null;
                 throw new Exception("Failed to login");
             }
+
+            if (string.IsNullOrEmpty(LoginResult.ErrorMessage))
+            {
+                m_LoggedInUser = LoginResult.LoggedInUser;
+            }
         }
 
         public List<string> GetFriendsName()
         {
-            if (LoggedInUser != null)
+            if (m_LoggedInUser != null)
             {
                 List<string> friendsName = GetFriendsName();
 
-                foreach (User friend in LoggedInUser.Friends)
+                foreach (User friend in m_LoggedInUser.Friends)
                 {
                     friendsName.Add(friend.Name);
                 }
@@ -69,6 +74,33 @@ namespace BasicFacebookFeatures
             }
 
             return new List<Photo>();
+        }
+
+        public string PostStatus(string i_Status)
+        {
+            Status postedStatus = m_LoggedInUser.PostStatus(i_Status);
+
+            return postedStatus.Id;
+        }
+
+        public FacebookObjectCollection<Album> GetAlbums()
+        {
+            return m_LoggedInUser.Albums;
+        }
+
+        public FacebookObjectCollection<Page> GetLikedPages()
+        {
+            return m_LoggedInUser.LikedPages;
+        }
+
+        public FacebookObjectCollection<Group> GetGroups() 
+        {
+            return m_LoggedInUser.Groups;
+        }
+
+        public FacebookObjectCollection<Post> GetPosts()
+        {
+            return m_LoggedInUser.Posts;
         }
     }
 }

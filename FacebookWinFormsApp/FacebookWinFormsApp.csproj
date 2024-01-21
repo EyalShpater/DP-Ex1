@@ -91,7 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlbumManager.cs" />
-    <Compile Include="Chart.cs" />
     <Compile Include="eMenuItem.cs" />
     <Compile Include="eSortOption.cs" />
     <Compile Include="FaceBookManager.cs" />
@@ -120,6 +119,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\BasicFacebookFeatures.Properties.Resources.datasource" />
+    <None Include="Properties\DataSources\BasicFacebookFeatures.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

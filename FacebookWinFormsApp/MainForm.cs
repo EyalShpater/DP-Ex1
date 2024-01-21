@@ -10,13 +10,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using System.Collections.ObjectModel;
 
 namespace BasicFacebookFeatures
 {
     public partial class MainForm : Form
     {
         private readonly FaceBookManager r_FacebookManager;
-        private const String k_AppID = "1828145884290754";
+        private const string k_AppID = "1828145884290754";
         private eMenuItem m_SelectedMenuItem;
         private bool menuExpand = true;
         private StatisticManager m_StatisticManager;
@@ -28,13 +29,8 @@ namespace BasicFacebookFeatures
             m_StatisticManager = new StatisticManager();
             FacebookService.s_CollectionLimit = 25;
             makePictureBoxCircle(pictureBoxProfile);
-        }
-
-        private void makePictureBoxCircle(PictureBox i_PictureBox)
-        {
-            System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
-            path.AddEllipse(0, 0, i_PictureBox.Width, i_PictureBox.Height);
-            i_PictureBox.Region = new Region(path);
+            menu.Enabled = false;
+            panelProilePictureAndWritePost.Enabled = false;
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)
@@ -55,12 +51,14 @@ namespace BasicFacebookFeatures
 
                 if (string.IsNullOrEmpty(r_FacebookManager.LoginResult.ErrorMessage))
                 {
-                    buttonLogin.Text = $"Logged in as {r_FacebookManager.LoginResult.LoggedInUser.Name}";
+                    buttonLogin.Text = $"Welcome {r_FacebookManager.LoginResult.LoggedInUser.Name}!";
                     buttonLogin.BackColor = Color.LightGreen;
+                    buttonLogin.Image = null;
                     pictureBoxProfile.ImageLocation = r_FacebookManager.LoginResult.LoggedInUser.PictureNormalURL;
                     buttonLogin.Enabled = false;
                     buttonLogout.Enabled = true;
-                    r_FacebookManager.LoggedInUser = r_FacebookManager.LoginResult.LoggedInUser;
+                    menu.Enabled = true;
+                    panelProilePictureAndWritePost.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -78,29 +76,13 @@ namespace BasicFacebookFeatures
             buttonLogout.Enabled = false;
         }
 
-        private List<string> GetFriendsName()
-        {
-            if (r_FacebookManager.LoggedInUser != null)
-            {
-                List<string> friendsName = GetFriendsName();
-
-                foreach (User friend in r_FacebookManager.LoggedInUser.Friends)
-                {
-                    friendsName.Add(friend.Name);
-                }
-
-                return friendsName;
-            }
-
-            return new List<string>();
-        }
-
         private void buttonPost_Click(object sender, EventArgs e)
         {
             try
             {
-                Status postedStatus = r_FacebookManager.LoggedInUser.PostStatus(richTextBoxNewPost.Text);
-                MessageBox.Show("Status Posted! ID: " + postedStatus.Id);
+                string postedStatusId = r_FacebookManager.PostStatus(richTextBoxNewPost.Text);
+
+                MessageBox.Show("Status Posted! ID: " + postedStatusId);
             }
             catch (Exception ex)
             {
@@ -125,19 +107,11 @@ namespace BasicFacebookFeatures
                     imageUrl = (comboBoxFacebookItems.SelectedItem as Group).PictureNormalURL;
                     break;
                 default:
-                    imageUrl = null;    
+                    imageUrl = null;
                     break;
             }
 
             displaySelectedItem(imageUrl);
-        }
-
-        private void changePostComponentVisibilty(bool i_Visible)
-        {
-            richTextBoxNewPost.Visible = i_Visible;
-            pictureBoxProfile.Visible = i_Visible;
-            buttonClear.Visible = i_Visible;
-            buttonPost.Visible = i_Visible;
         }
 
         private void displaySelectedItem(string i_ImageUrl)
@@ -220,8 +194,12 @@ namespace BasicFacebookFeatures
             changeChartVisibility(false);
             m_SelectedMenuItem = eMenuItem.Albums;
             comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.Albums;
+            comboBoxFacebookItems.DataSource = r_FacebookManager.GetAlbums();
 
+            if (comboBoxFacebookItems.Items.Count == 0)
+            {
+                MessageBox.Show("No albums to show :(");
+            }
         }
 
         private void changeAlbumsDownloadVisibility(bool i_Visible)
@@ -244,14 +222,24 @@ namespace BasicFacebookFeatures
             changeAlbumsDownloadVisibility(true);
             changeChartVisibility(false);
             comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.LikedPages;
+            comboBoxFacebookItems.DataSource = r_FacebookManager.GetLikedPages();
+
+            if (comboBoxFacebookItems.Items.Count == 0)
+            {
+                MessageBox.Show("No pages to show :(");
+            }
         }
 
         private void groupsButton_Click(object sender, EventArgs e)
         {
             m_SelectedMenuItem = eMenuItem.Groups;
             comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.Groups;
+            comboBoxFacebookItems.DataSource = r_FacebookManager.GetGroups();
+
+            if (comboBoxFacebookItems.Items.Count == 0)
+            {
+                MessageBox.Show("No groups to show :(");
+            }
 
             changeStatisticsComponentsVisibilty(false);
             changeAlbumsDownloadVisibility(true);
@@ -262,9 +250,9 @@ namespace BasicFacebookFeatures
         {
             m_SelectedMenuItem = eMenuItem.Statistics;
             comboBoxForAlbum.DisplayMember = "Name";
-            comboBoxForAlbum.DataSource = r_FacebookManager.LoggedInUser.Albums;
+            comboBoxForAlbum.DataSource = r_FacebookManager.GetAlbums();
 
-            changeAlbumsDownloadVisibility (false);
+            changeAlbumsDownloadVisibility(false);
             changeChartVisibility(true);
             changeStatisticsComponentsVisibilty(true);
         }
@@ -279,15 +267,14 @@ namespace BasicFacebookFeatures
         private void postsButton_Click(object sender, EventArgs e)
         {
             m_SelectedMenuItem = eMenuItem.WallPosts;
-            comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_FacebookManager.LoggedInUser.Posts;
-
+            panelPosts.Visible = true;
+            fetchPosts();
             changeStatisticsComponentsVisibilty(false);
             changeAlbumsDownloadVisibility(true);
             changeChartVisibility(false);
         }
 
-        private void ComboBoxForAlbum_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxForAlbum_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxForAlbum.SelectedItem is Album selectedAlbum)
             {
@@ -310,5 +297,38 @@ namespace BasicFacebookFeatures
             }
         }
 
+        private void fetchPosts()
+        {
+            FacebookObjectCollection<Post> allPosts = r_FacebookManager.GetPosts();
+
+            listBoxPosts.Items.Clear();
+            foreach (Post post in allPosts)
+            {
+                if (post.Message != null)
+                {
+                    listBoxPosts.Items.Add(post.Message);
+                }
+                else if (post.Caption != null)
+                {
+                    listBoxPosts.Items.Add(post.Caption);
+                }
+                else
+                {
+                    listBoxPosts.Items.Add(string.Format("[{0}]", post.Type));
+                }
+            }
+
+            if (listBoxPosts.Items.Count == 0)
+            {
+                MessageBox.Show("No Posts to retrieve :(");
+            }
+        }
+
+        private void makePictureBoxCircle(PictureBox i_PictureBox)
+        {
+            System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
+            path.AddEllipse(0, 0, i_PictureBox.Width, i_PictureBox.Height);
+            i_PictureBox.Region = new Region(path);
+        }
     }
 }
