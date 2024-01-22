@@ -13,26 +13,38 @@ namespace BasicFacebookFeatures
 {
     public class AlbumManager
     {
-        public Album Album { get; set; }
         private FacebookObjectCollection<Photo> m_Photos; 
         private int m_CurrentImageIndex;
-       
+        private Album m_Album;
+     
         public AlbumManager(Album i_Album)
         {
-            Album = i_Album;
-            m_Photos = Album.Photos;
+            m_Album = i_Album;
+            m_Photos = m_Album.Photos;
             m_CurrentImageIndex = 0;
         }
 
+        public Album Album
+        {
+            get
+            {
+                return m_Album;
+            }
+            set
+            {
+                m_Album = value;
+                m_CurrentImageIndex = 0;
+            }
+        }
 
         public string GetPictureAlbumURL()
         {
-            return Album.PictureAlbumURL;
+            return m_Album.PictureAlbumURL;
         }
 
         public string GetNextPhotoURL()
         {
-            m_CurrentImageIndex = (m_CurrentImageIndex + 1) % Album.Photos.Count;
+            m_CurrentImageIndex = (m_CurrentImageIndex + 1) % m_Album.Photos.Count;
 
             return m_Photos.ElementAt(m_CurrentImageIndex).PictureNormalURL;
         }
@@ -40,7 +52,7 @@ namespace BasicFacebookFeatures
         public string GetPreviousPhotoURL()
         {
             m_CurrentImageIndex = m_CurrentImageIndex == 0 ?
-                Album.Photos.Count - 1 : m_CurrentImageIndex - 1;
+                m_Album.Photos.Count - 1 : m_CurrentImageIndex - 1;
 
             return m_Photos.ElementAt(m_CurrentImageIndex).PictureNormalURL;
         }
@@ -48,7 +60,7 @@ namespace BasicFacebookFeatures
         public void DownloadAlbum(string i_Path)
         {
             int index = 1;
-            string albumPath = Path.Combine(i_Path, Album.Name);
+            string albumPath = Path.Combine(i_Path, m_Album.Name);
             
             Directory.CreateDirectory(albumPath);
             foreach (Photo photo in m_Photos)
