@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
 
 namespace BasicFacebookFeatures
@@ -14,14 +10,16 @@ namespace BasicFacebookFeatures
     public class AlbumManager
     {
         private FacebookObjectCollection<Photo> m_Photos; 
-        private int m_CurrentImageIndex;
         private Album m_Album;
-     
+        private eSortOption m_SortOption;
+        private int m_CurrentImageIndex;
+
         public AlbumManager(Album i_Album)
         {
             m_Album = i_Album;
             m_Photos = m_Album.Photos;
             m_CurrentImageIndex = 0;
+            m_SortOption = eSortOption.Date;
         }
 
         public Album Album
@@ -34,6 +32,7 @@ namespace BasicFacebookFeatures
             {
                 m_Album = value;
                 m_CurrentImageIndex = 0;
+                SortAlbum(m_SortOption);
             }
         }
 
@@ -84,10 +83,10 @@ namespace BasicFacebookFeatures
         {
             switch (i_SortOption)
             {
-                case eSortOption.ByLikesAmount:
+                case eSortOption.Likes:
                     m_Photos.OrderBy(photo => photo.LikedBy.Count);
                     break;
-                case eSortOption.ByCommentsAmount:
+                case eSortOption.Comments:
                     m_Photos.OrderBy(photo => photo.Comments.Count); 
                     break;
                 default:
@@ -95,6 +94,7 @@ namespace BasicFacebookFeatures
                     break;
             }
 
+            m_SortOption = i_SortOption;
             m_CurrentImageIndex = 0;
         }
 

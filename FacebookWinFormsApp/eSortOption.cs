@@ -8,8 +8,8 @@ namespace BasicFacebookFeatures
 {
     public enum eSortOption
     {
-        ByLikesAmount,
-        ByCommentsAmount,
-        ByDate
+        Likes,
+        Comments,
+        Date
     }
 }
