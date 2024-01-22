@@ -20,6 +20,7 @@ namespace BasicFacebookFeatures
             {
                 return m_Album;
             }
+
             set
             {
                 m_Album = value;

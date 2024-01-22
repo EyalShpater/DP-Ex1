@@ -1,21 +1,21 @@
-﻿using FacebookWrapper.ObjectModel;
-using FacebookWrapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Globalization;
 using System.Windows.Forms.DataVisualization.Charting;
+using FacebookWrapper.ObjectModel;
+using FacebookWrapper;
 
 namespace BasicFacebookFeatures
 {
     public partial class MainForm : Form
     {
+        private static readonly eFormControlTag[] sr_DefaultFormComponents = { eFormControlTag.Header, eFormControlTag.Profile, eFormControlTag.Menu };
         private const string k_AppId = "1828145884290754";
         private const int k_CollectionLimit = 25;
         private readonly FacebookManager r_FacebookManager;
-        private static readonly eFormControlTag[] sr_DefaultFormComponents = { eFormControlTag.Header, eFormControlTag.Profile, eFormControlTag.Menu };
         private eMenuItem m_SelectedMenuItem;
         private bool m_IsMenuExpand = true;
 
@@ -91,7 +91,7 @@ namespace BasicFacebookFeatures
             switch (m_SelectedMenuItem)
             {
                 case eMenuItem.Albums:
-                    r_FacebookManager.SetCurrentViewingAlbum(comboBoxFacebookItems.SelectedItem as Album); //todo: to think how to do it better
+                    r_FacebookManager.SetCurrentViewingAlbum(comboBoxFacebookItems.SelectedItem as Album); 
                     imageUrl = (comboBoxFacebookItems.SelectedItem as Album).PictureAlbumURL;
                     break;
                 case eMenuItem.Pages:
@@ -269,7 +269,7 @@ namespace BasicFacebookFeatures
                 r_FacebookManager.SetCurrentViewingAlbum(selectedAlbum);
                 chartLikesByMonth.Enabled = true;
                 displayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);
-                mostLikedImageUrl= r_FacebookManager.AlbumManager.FindTheMostLikedImageInAlbum(selectedAlbum);
+                mostLikedImageUrl = r_FacebookManager.AlbumManager.FindTheMostLikedImageInAlbum(selectedAlbum);
                 if (!string.IsNullOrEmpty(mostLikedImageUrl))
                 {
                     mostLikedPic.LoadAsync(mostLikedImageUrl);
