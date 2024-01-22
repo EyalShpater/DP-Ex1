@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace BasicFacebookFeatures
 {
@@ -20,14 +22,12 @@ namespace BasicFacebookFeatures
         private const string k_AppID = "1828145884290754";
         private static readonly eFormControlTag[] sr_DefaultFormComponents = { eFormControlTag.Header, eFormControlTag.Profile, eFormControlTag.Menu };
         private eMenuItem m_SelectedMenuItem;
-        private bool menuExpand = true;
-        private StatisticManager m_StatisticManager;
+        private bool m_IsMenuExpand = true;
 
         public MainForm()
         {
             InitializeComponent();
             r_FacebookManager = new FaceBookManager(k_AppID);
-            m_StatisticManager = new StatisticManager();
             FacebookService.s_CollectionLimit = 25;
             makePictureBoxCircle(pictureBoxProfile);
             menu.Enabled = false;
@@ -135,7 +135,7 @@ namespace BasicFacebookFeatures
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
                 {
-                    r_FacebookManager.CurrentViewingAlbum.DownloadAlbum(folderDialog.SelectedPath);
+                    r_FacebookManager.AlbumManager.DownloadAlbum(folderDialog.SelectedPath);
                     MessageBox.Show("Download has successfully finished!");
                 }
                 else
@@ -148,12 +148,12 @@ namespace BasicFacebookFeatures
 
         private void buttonNextPhoto_Click(object sender, EventArgs e)
         {
-            displaySelectedItem(r_FacebookManager.CurrentViewingAlbum.GetNextPhotoUrl());
+            displaySelectedItem(r_FacebookManager.AlbumManager.GetNextPhotoUrl());
         }
 
         private void buttonPreviousPhoto_Click(object sender, EventArgs e)
         {
-            displaySelectedItem(r_FacebookManager.CurrentViewingAlbum.GetPreviousPhotoUrl());
+            displaySelectedItem(r_FacebookManager.AlbumManager.GetPreviousPhotoUrl());
         }
 
         private void buttonClear_Click(object sender, EventArgs e)
@@ -163,12 +163,12 @@ namespace BasicFacebookFeatures
 
         private void menuTransition_Tick(object sender, EventArgs e)
         {
-            if (menuExpand)
+            if (m_IsMenuExpand)
             {
                 menu.Width -= 10;
                 if (menu.Width <= 80)
                 {
-                    menuExpand = false;
+                    m_IsMenuExpand = false;
                     menuTransition.Stop();
                 }
             }
@@ -177,7 +177,7 @@ namespace BasicFacebookFeatures
                 menu.Width += 10;
                 if (menu.Width >= 170)
                 {
-                    menuExpand = true;
+                    m_IsMenuExpand = true;
                     menuTransition.Stop();
                 }
             }
@@ -274,12 +274,12 @@ namespace BasicFacebookFeatures
             if (comboBoxForAlbum.SelectedItem is Album selectedAlbum)
             {
                 r_FacebookManager.SetCurrentViewingAlbum(selectedAlbum);
-                string imageUrl = r_FacebookManager.CurrentViewingAlbum.GetPictureAlbumUrl();
+                string imageUrl = r_FacebookManager.AlbumManager.GetPictureAlbumUrl();
 
                 chartLikesByMonth.Enabled = true;
-                LikesForPhotos.DisplayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);
+                displayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);
 
-                string mostLikedImageUrl = m_StatisticManager.findTheMostLikedImageInAlbum(selectedAlbum);
+                string mostLikedImageUrl = r_FacebookManager.AlbumManager.FindTheMostLikedImageInAlbum(selectedAlbum);
 
                 if (!string.IsNullOrEmpty(mostLikedImageUrl))
                 {
@@ -348,9 +348,46 @@ namespace BasicFacebookFeatures
         {
             if (comboBoxSortBy.SelectedItem is eSortOption sortOption)
             {
-                r_FacebookManager.CurrentViewingAlbum.SortAlbum(sortOption);
+                r_FacebookManager.AlbumManager.SortAlbum(sortOption);
           
             } 
+        }
+
+        private void displayLikesByMonthBarChart(Album i_Album, Chart io_ChartLikesByMonth)
+        {
+            io_ChartLikesByMonth.Series.Clear();
+
+            IEnumerable<IGrouping<int, Photo>> groupedPhotos = i_Album.Photos
+                .Where(photo => photo.CreatedTime != null)
+                .GroupBy(photo => photo.CreatedTime.Value.Month);
+            IEnumerable<object> likesByMonth = groupedPhotos
+                .Select(group => new { Month = group.Key, TotalLikes = group.Sum(photo => photo.LikedBy.Count) })
+                .OrderBy(item => item.Month)
+                .ToList();
+            Series series = io_ChartLikesByMonth.Series.Add($"{i_Album.Name} - Likes by Month");
+
+            foreach (object dataPoint in likesByMonth)
+            {
+                int month = (int)dataPoint.GetType().GetProperty("Month").GetValue(dataPoint);
+                int totalLikes = (int)dataPoint.GetType().GetProperty("TotalLikes").GetValue(dataPoint);
+
+                series.Points.AddXY(getMonthName(month), totalLikes);
+            }
+
+            initialChart(io_ChartLikesByMonth);
+        }
+
+        private void initialChart(Chart o_ChartLikes)
+        {
+            o_ChartLikes.ChartAreas[0].AxisX.Interval = 1;
+            o_ChartLikes.ChartAreas[0].AxisY.Title = "Number of Likes";
+            o_ChartLikes.ChartAreas[0].AxisX.Title = "Months";
+            o_ChartLikes.ChartAreas[0].RecalculateAxesScale();
+        }
+
+        private string getMonthName(int i_MonthNumber)
+        {
+            return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i_MonthNumber);
         }
     }
 }

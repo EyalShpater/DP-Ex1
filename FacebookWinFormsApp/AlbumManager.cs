@@ -11,7 +11,7 @@ namespace BasicFacebookFeatures
     {
         private FacebookObjectCollection<Photo> m_Photos; 
         private Album m_Album;
-        private eSortOption m_SortOption = eSortOption.Date;
+        private eSortOption m_SortOption = eSortOption.Likes;
         private int m_CurrentImageIndex = 0;
 
         public Album Album
@@ -92,6 +92,27 @@ namespace BasicFacebookFeatures
                 m_SortOption = i_SortOption;
                 m_CurrentImageIndex = 0;
             }
+        }
+
+        public string FindTheMostLikedImageInAlbum(Album i_CurrentViewingAlbum)
+        {
+            Photo mostLovedPhoto = findMostLovedPhoto(i_CurrentViewingAlbum);
+            string mostLovedUrl = string.Empty;
+
+            if (mostLovedPhoto != null)
+            {
+                mostLovedUrl = mostLovedPhoto.PictureNormalURL;
+            }
+
+            return mostLovedUrl;
+        }
+
+        private Photo findMostLovedPhoto(Album i_Album)
+        {
+            return i_Album.Photos
+                .Where(photo => photo.LikedBy.Count > 0)
+                .OrderByDescending(photo => photo.LikedBy.Count)
+                .FirstOrDefault();
         }
 
         private void downloadPhoto(string i_PhotoUrl, string i_Destination)
