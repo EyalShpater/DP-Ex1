@@ -11,16 +11,8 @@ namespace BasicFacebookFeatures
     {
         private FacebookObjectCollection<Photo> m_Photos; 
         private Album m_Album;
-        private eSortOption m_SortOption;
-        private int m_CurrentImageIndex;
-
-        public AlbumManager(Album i_Album)
-        {
-            m_Album = i_Album;
-            m_Photos = m_Album.Photos;
-            m_CurrentImageIndex = 0;
-            m_SortOption = eSortOption.Date;
-        }
+        private eSortOption m_SortOption = eSortOption.Date;
+        private int m_CurrentImageIndex = 0;
 
         public Album Album
         {
@@ -32,23 +24,24 @@ namespace BasicFacebookFeatures
             {
                 m_Album = value;
                 m_CurrentImageIndex = 0;
+                m_Photos = m_Album.Photos;
                 SortAlbum(m_SortOption);
             }
         }
 
-        public string GetPictureAlbumURL()
+        public string GetPictureAlbumUrl()
         {
             return m_Album.PictureAlbumURL;
         }
 
-        public string GetNextPhotoURL()
+        public string GetNextPhotoUrl()
         {
             m_CurrentImageIndex = (m_CurrentImageIndex + 1) % m_Album.Photos.Count;
 
             return m_Photos.ElementAt(m_CurrentImageIndex).PictureNormalURL;
         }
 
-        public string GetPreviousPhotoURL()
+        public string GetPreviousPhotoUrl()
         {
             m_CurrentImageIndex = m_CurrentImageIndex == 0 ?
                 m_Album.Photos.Count - 1 : m_CurrentImageIndex - 1;
@@ -81,28 +74,31 @@ namespace BasicFacebookFeatures
 
         public void SortAlbum(eSortOption i_SortOption)
         {
-            switch (i_SortOption)
+            if(i_SortOption != m_SortOption)
             {
-                case eSortOption.Likes:
-                    m_Photos.OrderBy(photo => photo.LikedBy.Count);
-                    break;
-                case eSortOption.Comments:
-                    m_Photos.OrderBy(photo => photo.Comments.Count); 
-                    break;
-                default:
-                    m_Photos.OrderBy(photo => photo.CreatedTime);
-                    break;
-            }
+                switch(i_SortOption)
+                {
+                    case eSortOption.Likes:
+                        m_Photos.OrderBy(photo => photo.LikedBy.Count);
+                        break;
+                    case eSortOption.Comments:
+                        m_Photos.OrderBy(photo => photo.Comments.Count);
+                        break;
+                    default:
+                        m_Photos.OrderBy(photo => photo.CreatedTime);
+                        break;
+                }
 
-            m_SortOption = i_SortOption;
-            m_CurrentImageIndex = 0;
+                m_SortOption = i_SortOption;
+                m_CurrentImageIndex = 0;
+            }
         }
 
-        private void downloadPhoto(string i_PhotoURL, string i_Destination)
+        private void downloadPhoto(string i_PhotoUrl, string i_Destination)
         {
             using (WebClient client = new WebClient())
             { 
-                client.DownloadFile(i_PhotoURL, i_Destination);
+                client.DownloadFile(i_PhotoUrl, i_Destination);
             }
         }
     }

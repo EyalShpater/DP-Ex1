@@ -148,12 +148,12 @@ namespace BasicFacebookFeatures
 
         private void buttonNextPhoto_Click(object sender, EventArgs e)
         {
-            displaySelectedItem(r_FacebookManager.CurrentViewingAlbum.GetNextPhotoURL());
+            displaySelectedItem(r_FacebookManager.CurrentViewingAlbum.GetNextPhotoUrl());
         }
 
         private void buttonPreviousPhoto_Click(object sender, EventArgs e)
         {
-            displaySelectedItem(r_FacebookManager.CurrentViewingAlbum.GetPreviousPhotoURL());
+            displaySelectedItem(r_FacebookManager.CurrentViewingAlbum.GetPreviousPhotoUrl());
         }
 
         private void buttonClear_Click(object sender, EventArgs e)
@@ -274,7 +274,7 @@ namespace BasicFacebookFeatures
             if (comboBoxForAlbum.SelectedItem is Album selectedAlbum)
             {
                 r_FacebookManager.SetCurrentViewingAlbum(selectedAlbum);
-                string imageUrl = r_FacebookManager.CurrentViewingAlbum.GetPictureAlbumURL();
+                string imageUrl = r_FacebookManager.CurrentViewingAlbum.GetPictureAlbumUrl();
 
                 chartLikesByMonth.Enabled = true;
                 LikesForPhotos.DisplayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);

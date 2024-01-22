@@ -21,6 +21,7 @@ namespace BasicFacebookFeatures
         public FaceBookManager(string i_AppID)
         {
             r_AppID = i_AppID;
+            CurrentViewingAlbum = new AlbumManager();
         }
 
         public void Login()
@@ -66,6 +67,7 @@ namespace BasicFacebookFeatures
 
             return new List<string>();
         }
+
         public List<Photo> GetPhotosFromAlbum(Album i_SelectedAlbum)
         {
             if (i_SelectedAlbum != null)
@@ -85,7 +87,7 @@ namespace BasicFacebookFeatures
 
         public void SetCurrentViewingAlbum(Album i_Album)
         {
-            CurrentViewingAlbum = new AlbumManager(i_Album);
+            CurrentViewingAlbum.Album = i_Album;
         }
 
         public FacebookObjectCollection<Album> GetAlbums()
