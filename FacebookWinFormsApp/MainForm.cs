@@ -264,12 +264,12 @@ namespace BasicFacebookFeatures
         {
             if (comboBoxForAlbum.SelectedItem is Album selectedAlbum)
             {
+                string mostLikedImageUrl;
+
                 r_FacebookManager.SetCurrentViewingAlbum(selectedAlbum);
                 chartLikesByMonth.Enabled = true;
                 displayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);
-
-                string mostLikedImageUrl = r_FacebookManager.AlbumManager.FindTheMostLikedImageInAlbum(selectedAlbum);
-
+                mostLikedImageUrl= r_FacebookManager.AlbumManager.FindTheMostLikedImageInAlbum(selectedAlbum);
                 if (!string.IsNullOrEmpty(mostLikedImageUrl))
                 {
                     mostLikedPic.LoadAsync(mostLikedImageUrl);
@@ -338,7 +338,6 @@ namespace BasicFacebookFeatures
             if (comboBoxSortBy.SelectedItem is eSortOption sortOption)
             {
                 r_FacebookManager.AlbumManager.SortAlbum(sortOption);
-          
             } 
         }
 
