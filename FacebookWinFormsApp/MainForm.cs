@@ -2,15 +2,9 @@
 using FacebookWrapper;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -18,8 +12,9 @@ namespace BasicFacebookFeatures
 {
     public partial class MainForm : Form
     {
-        private readonly FaceBookManager r_FacebookManager;
-        private const string k_AppID = "1828145884290754";
+        private const string k_AppId = "1828145884290754";
+        private const int k_CollectionLimit = 25;
+        private readonly FacebookManager r_FacebookManager;
         private static readonly eFormControlTag[] sr_DefaultFormComponents = { eFormControlTag.Header, eFormControlTag.Profile, eFormControlTag.Menu };
         private eMenuItem m_SelectedMenuItem;
         private bool m_IsMenuExpand = true;
@@ -27,8 +22,8 @@ namespace BasicFacebookFeatures
         public MainForm()
         {
             InitializeComponent();
-            r_FacebookManager = new FaceBookManager(k_AppID);
-            FacebookService.s_CollectionLimit = 25;
+            r_FacebookManager = new FacebookManager(k_AppId);
+            FacebookService.s_CollectionLimit = k_CollectionLimit;
             makePictureBoxCircle(pictureBoxProfile);
             menu.Enabled = false;
             panelProilePictureAndWritePost.Enabled = false;
@@ -37,7 +32,6 @@ namespace BasicFacebookFeatures
         private void buttonLogin_Click(object sender, EventArgs e)
         {
             Clipboard.SetText("design.patterns");
-
             if (r_FacebookManager.LoginResult == null)
             {
                 login();
@@ -49,11 +43,10 @@ namespace BasicFacebookFeatures
             try
             {
                 r_FacebookManager.Login();
-
                 if (string.IsNullOrEmpty(r_FacebookManager.LoginResult.ErrorMessage))
                 {
                     buttonLogin.Text = $"Welcome {r_FacebookManager.LoginResult.LoggedInUser.Name}!";
-                    buttonLogin.BackColor = Color.LightGreen;
+                    buttonLogin.BackColor = Color.LightBlue;
                     buttonLogin.Image = null;
                     pictureBoxProfile.ImageLocation = r_FacebookManager.LoginResult.LoggedInUser.PictureNormalURL;
                     buttonLogin.Enabled = false;
@@ -143,7 +136,6 @@ namespace BasicFacebookFeatures
                     MessageBox.Show("An Error Has Occured!");
                 }
             }
-
         }
 
         private void buttonNextPhoto_Click(object sender, EventArgs e)
@@ -191,7 +183,7 @@ namespace BasicFacebookFeatures
         private void albumsButton_Click(object sender, EventArgs e)
         {
             showMenuItemComponents(eFormControlTag.Pagination, eFormControlTag.Download, 
-                eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox, eFormControlTag.SortByComboBox);
+                eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox, eFormControlTag.SortBy);
             m_SelectedMenuItem = eMenuItem.Albums;
             setAlbumComboBoxes();
 
@@ -205,7 +197,6 @@ namespace BasicFacebookFeatures
         {
             comboBoxFacebookItems.DisplayMember = "Name";
             comboBoxFacebookItems.DataSource = r_FacebookManager.GetAlbums();
-
             comboBoxSortBy.DataSource = Enum.GetValues(typeof(eSortOption));
         }
 
@@ -274,8 +265,6 @@ namespace BasicFacebookFeatures
             if (comboBoxForAlbum.SelectedItem is Album selectedAlbum)
             {
                 r_FacebookManager.SetCurrentViewingAlbum(selectedAlbum);
-                string imageUrl = r_FacebookManager.AlbumManager.GetPictureAlbumUrl();
-
                 chartLikesByMonth.Enabled = true;
                 displayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);
 

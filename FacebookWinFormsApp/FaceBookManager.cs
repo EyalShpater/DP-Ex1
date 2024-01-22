@@ -4,14 +4,14 @@ using FacebookWrapper;
 
 namespace BasicFacebookFeatures
 {
-    public class FaceBookManager
+    public class FacebookManager
     {
         private readonly string r_AppId;
         private User m_LoggedInUser;
         public LoginResult LoginResult { get; set; }
         public AlbumManager AlbumManager { get; }
 
-        public FaceBookManager(string i_AppId)
+        public FacebookManager(string i_AppId)
         {
             r_AppId = i_AppId;
             AlbumManager = new AlbumManager();

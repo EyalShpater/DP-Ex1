@@ -94,7 +94,7 @@
     <Compile Include="eFormControlTag.cs" />
     <Compile Include="eMenuItem.cs" />
     <Compile Include="eSortOption.cs" />
-    <Compile Include="FaceBookManager.cs" />
+    <Compile Include="FacebookManager.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.panelTop = new System.Windows.Forms.Panel();
             this.buttonHamburger = new System.Windows.Forms.PictureBox();
             this.labelHeader = new System.Windows.Forms.Label();
@@ -71,6 +71,7 @@
             this.richTextBoxNewPost = new System.Windows.Forms.RichTextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.comboBoxSortBy = new System.Windows.Forms.ComboBox();
+            this.labelSortBy = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.buttonHamburger)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartLikesByMonth)).BeginInit();
@@ -157,18 +158,18 @@
             // 
             // chartLikesByMonth
             // 
-            chartArea5.Name = "ChartArea1";
-            this.chartLikesByMonth.ChartAreas.Add(chartArea5);
+            chartArea2.Name = "ChartArea1";
+            this.chartLikesByMonth.ChartAreas.Add(chartArea2);
             this.chartLikesByMonth.Enabled = false;
-            legend5.Name = "Legend1";
-            this.chartLikesByMonth.Legends.Add(legend5);
+            legend2.Name = "Legend1";
+            this.chartLikesByMonth.Legends.Add(legend2);
             this.chartLikesByMonth.Location = new System.Drawing.Point(884, 520);
             this.chartLikesByMonth.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chartLikesByMonth.Name = "chartLikesByMonth";
-            series5.ChartArea = "ChartArea1";
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            this.chartLikesByMonth.Series.Add(series5);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chartLikesByMonth.Series.Add(series2);
             this.chartLikesByMonth.Size = new System.Drawing.Size(627, 397);
             this.chartLikesByMonth.TabIndex = 9;
             this.chartLikesByMonth.Tag = "MainChart";
@@ -298,7 +299,7 @@
             // 
             // menu
             // 
-            this.menu.BackColor = System.Drawing.SystemColors.Desktop;
+            this.menu.BackColor = System.Drawing.Color.Black;
             this.menu.Controls.Add(this.albumsButton);
             this.menu.Controls.Add(this.pagesButton);
             this.menu.Controls.Add(this.groupsButton);
@@ -528,19 +529,34 @@
             // 
             this.comboBoxSortBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSortBy.FormattingEnabled = true;
-            this.comboBoxSortBy.Location = new System.Drawing.Point(423, 963);
+            this.comboBoxSortBy.Location = new System.Drawing.Point(572, 963);
             this.comboBoxSortBy.Name = "comboBoxSortBy";
-            this.comboBoxSortBy.Size = new System.Drawing.Size(391, 33);
+            this.comboBoxSortBy.Size = new System.Drawing.Size(242, 33);
             this.comboBoxSortBy.TabIndex = 1;
-            this.comboBoxSortBy.Tag = "SortByComboBox";
+            this.comboBoxSortBy.Tag = "SortBy";
             this.comboBoxSortBy.Visible = false;
             this.comboBoxSortBy.SelectedIndexChanged += new System.EventHandler(this.comboBoxSortBy_SelectedIndexChanged);
+            // 
+            // labelSortBy
+            // 
+            this.labelSortBy.AutoSize = true;
+            this.labelSortBy.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.labelSortBy.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSortBy.ForeColor = System.Drawing.Color.Snow;
+            this.labelSortBy.Location = new System.Drawing.Point(429, 965);
+            this.labelSortBy.Name = "labelSortBy";
+            this.labelSortBy.Size = new System.Drawing.Size(111, 31);
+            this.labelSortBy.TabIndex = 35;
+            this.labelSortBy.Tag = "SortBy";
+            this.labelSortBy.Text = "Sort By:";
+            this.labelSortBy.Visible = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1593, 1025);
+            this.Controls.Add(this.labelSortBy);
             this.Controls.Add(this.comboBoxSortBy);
             this.Controls.Add(this.mostLikedPic);
             this.Controls.Add(this.comboBoxForAlbum);
@@ -616,5 +632,6 @@
         private System.Windows.Forms.RichTextBox richTextBoxNewPost;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ComboBox comboBoxSortBy;
+        private System.Windows.Forms.Label labelSortBy;
     }
 }

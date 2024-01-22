@@ -84,7 +84,7 @@ namespace BasicFacebookFeatures
                     case eSortOption.Comments:
                         m_Photos.OrderBy(photo => photo.Comments.Count);
                         break;
-                    default:
+                    case eSortOption.Date:
                         m_Photos.OrderBy(photo => photo.CreatedTime);
                         break;
                 }
