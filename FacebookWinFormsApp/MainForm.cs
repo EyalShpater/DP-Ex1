@@ -27,6 +27,7 @@ namespace BasicFacebookFeatures
             makePictureBoxCircle(pictureBoxProfile);
             menu.Enabled = false;
             panelProilePictureAndWritePost.Enabled = false;
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)
