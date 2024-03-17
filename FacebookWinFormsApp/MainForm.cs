@@ -7,11 +7,13 @@ using System.Globalization;
 using System.Windows.Forms.DataVisualization.Charting;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
+using System.Threading;
 
 namespace BasicFacebookFeatures
 {
     public partial class MainForm : Form
     {
+        private readonly List<ILogoutObserver> r_logoutObservers = new List<ILogoutObserver>();
         private static readonly eFormControlTag[] sr_DefaultFormComponents = { eFormControlTag.Header, eFormControlTag.Profile, eFormControlTag.Menu };
         private const string k_AppId = "1828145884290754";
         private const int k_CollectionLimit = 25;
@@ -35,7 +37,7 @@ namespace BasicFacebookFeatures
             Clipboard.SetText("design.patterns");
             if (r_FacebookManager.LoginResult == null)
             {
-                login();
+                new Thread(login).Start();
             }
         }
 
@@ -46,14 +48,17 @@ namespace BasicFacebookFeatures
                 r_FacebookManager.Login();
                 if (string.IsNullOrEmpty(r_FacebookManager.LoginResult.ErrorMessage))
                 {
-                    buttonLogin.Text = $"Welcome {r_FacebookManager.LoginResult.LoggedInUser.Name}!";
-                    buttonLogin.BackColor = Color.LightBlue;
-                    buttonLogin.Image = null;
-                    pictureBoxProfile.ImageLocation = r_FacebookManager.LoginResult.LoggedInUser.PictureNormalURL;
-                    buttonLogin.Enabled = false;
-                    buttonLogout.Enabled = true;
-                    menu.Enabled = true;
-                    panelProilePictureAndWritePost.Enabled = true;
+                    buttonLogin.Invoke(new Action(() =>
+                    {
+                        buttonLogin.Text = $"Welcome {r_FacebookManager.LoginResult.LoggedInUser.Name}!";
+                        buttonLogin.BackColor = Color.LightBlue;
+                        buttonLogin.Image = null;
+                        buttonLogin.Enabled = false;
+                    }));
+                    pictureBoxProfile.Invoke(new Action(() => pictureBoxProfile.ImageLocation = r_FacebookManager.LoginResult.LoggedInUser.PictureNormalURL));
+                    buttonLogout.Invoke(new Action(() => buttonLogout.Enabled = true));
+                    menu.Invoke(new Action(() => menu.Enabled = true));
+                    panelProilePictureAndWritePost.Invoke(new Action(() => panelProilePictureAndWritePost.Enabled = true));
                 }
             }
             catch (Exception ex)
@@ -66,9 +71,18 @@ namespace BasicFacebookFeatures
         {
             FacebookService.LogoutWithUI();
             buttonLogin.Text = "Login";
-            r_FacebookManager.LoginResult = null;
             buttonLogin.Enabled = true;
             buttonLogout.Enabled = false;
+            notifyLogoutObservers();
+            // clear all data
+        }
+
+        private void notifyLogoutObservers()
+        {
+            foreach (ILogoutObserver observer in r_logoutObservers)
+            {
+                observer.NotifyLoggedOut();
+            }
         }
 
         private void buttonPost_Click(object sender, EventArgs e)
@@ -84,7 +98,7 @@ namespace BasicFacebookFeatures
                 MessageBox.Show(ex.ToString());
             }
         }
-
+       
         private void comboBoxFacebookItems_SelectedIndexChanged(object sender, EventArgs e)
         {
             string imageUrl;
@@ -129,12 +143,17 @@ namespace BasicFacebookFeatures
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
                 {
-                    r_FacebookManager.AlbumManager.DownloadAlbum(folderDialog.SelectedPath);
-                    MessageBox.Show("Download has successfully finished!");
+                    string selectedPath = folderDialog.SelectedPath;
+
+                    new Thread(() =>
+                    {
+                        r_FacebookManager.AlbumManager.DownloadAlbum(selectedPath);
+                        MessageBox.Show("Download has successfully finished!");
+                    }).Start();
                 }
                 else
                 {
-                    MessageBox.Show("An Error Has Occured!");
+                    MessageBox.Show("An Error Has Occurred!");
                 }
             }
         }
@@ -186,19 +205,22 @@ namespace BasicFacebookFeatures
             showMenuItemComponents(eFormControlTag.Pagination, eFormControlTag.Download, 
                 eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox, eFormControlTag.SortBy);
             m_SelectedMenuItem = eMenuItem.Albums;
-            setAlbumComboBoxes();
+            new Thread(setAlbumComboBoxes).Start();
+        }
+
+        private void setAlbumComboBoxes()
+        {
+            comboBoxFacebookItems.Invoke(new Action(() => comboBoxFacebookItems.DisplayMember = "Name"));
+            comboBoxSortBy.Invoke(new Action(() => comboBoxSortBy.DataSource = Enum.GetValues(typeof(eSortOption))));
+            foreach (Album album in r_FacebookManager.GetAlbums())
+            {
+                comboBoxFacebookItems.Invoke(new Action(() => comboBoxFacebookItems.Items.Add(album)));
+            }   
 
             if (comboBoxFacebookItems.Items.Count == 0)
             {
                 MessageBox.Show("No albums to show :(");
             }
-        }
-
-        private void setAlbumComboBoxes()
-        {
-            comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_FacebookManager.GetAlbums();
-            comboBoxSortBy.DataSource = Enum.GetValues(typeof(eSortOption));
         }
 
         private void showMenuItemComponents(params eFormControlTag[] i_TagValues)
@@ -223,13 +245,31 @@ namespace BasicFacebookFeatures
         {
             m_SelectedMenuItem = eMenuItem.Pages;
             showMenuItemComponents(eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox);
-            comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_FacebookManager.GetLikedPages();
-
-            if (comboBoxFacebookItems.Items.Count == 0)
+            new Thread(() =>
             {
-                MessageBox.Show("No pages to show :(");
+                fetchPages();
+            }).Start();
+        }
+
+        private void fetchPages()
+        {
+            comboBoxFacebookItems.Invoke(new Action(() =>
+            {
+                comboBoxFacebookItems.Items.Clear();
+                comboBoxFacebookItems.DisplayMember = "Name";
+            }));
+            foreach (Page page in r_FacebookManager.GetLikedPages())
+            {
+                comboBoxFacebookItems.Invoke(new Action(() => comboBoxFacebookItems.Items.Add(page)));
             }
+
+            comboBoxFacebookItems.Invoke(new Action(()=>
+            {
+                if (comboBoxFacebookItems.Items.Count == 0)
+                {
+                    MessageBox.Show("No pages to show :(");
+                }
+            }));
         }
 
         private void groupsButton_Click(object sender, EventArgs e)
@@ -245,40 +285,57 @@ namespace BasicFacebookFeatures
             }
         }
 
+
         private void statisticsButton_Click(object sender, EventArgs e)
         {
             m_SelectedMenuItem = eMenuItem.Statistics;
             showMenuItemComponents(eFormControlTag.MainChart, eFormControlTag.TopPictureLabel, 
                 eFormControlTag.SmallPictureBox, eFormControlTag.TopCenterComboBox);
-            comboBoxForAlbum.DisplayMember = "Name";
-            comboBoxForAlbum.DataSource = r_FacebookManager.GetAlbums();
+          new Thread(fetchStatistics).Start();
+        }
+
+        private void fetchStatistics()
+        {
+            comboBoxForAlbum.Invoke(new Action(() =>
+            {
+                comboBoxForAlbum.Items.Clear();
+                comboBoxForAlbum.DisplayMember = "Name";
+            }));
+            foreach (Album album in r_FacebookManager.GetAlbums())
+            {
+                comboBoxForAlbum.Invoke(new Action(() => comboBoxForAlbum.Items.Add(album)));
+            }
+          
         }
 
         private void postsButton_Click(object sender, EventArgs e)
         {
             m_SelectedMenuItem = eMenuItem.WallPosts;
             showMenuItemComponents(eFormControlTag.PostsPanel);
-            fetchPosts();
+            new Thread(fetchPosts).Start();
         }
 
         private void comboBoxForAlbum_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxForAlbum.SelectedItem is Album selectedAlbum)
             {
-                string mostLikedImageUrl;
+                new Thread(() =>
+                {
+                    string mostLikedImageUrl;
 
-                r_FacebookManager.SetCurrentViewingAlbum(selectedAlbum);
-                chartLikesByMonth.Enabled = true;
-                displayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);
-                mostLikedImageUrl = r_FacebookManager.AlbumManager.FindTheMostLikedImageInAlbum(selectedAlbum);
-                if (!string.IsNullOrEmpty(mostLikedImageUrl))
-                {
-                    mostLikedPic.LoadAsync(mostLikedImageUrl);
-                }
-                else
-                {
-                    mostLikedPic.Image = mostLikedPic.ErrorImage;
-                }
+                    r_FacebookManager.SetCurrentViewingAlbum(selectedAlbum);
+                    chartLikesByMonth.Invoke(new Action(() => chartLikesByMonth.Enabled = true));
+                    displayLikesByMonthBarChart(selectedAlbum, chartLikesByMonth);
+                    mostLikedImageUrl = r_FacebookManager.AlbumManager.FindTheMostLikedImageInAlbum(selectedAlbum);
+                    if (!string.IsNullOrEmpty(mostLikedImageUrl))
+                    {
+                        mostLikedPic.LoadAsync(mostLikedImageUrl);
+                    }
+                    else
+                    {
+                        mostLikedPic.Image = mostLikedPic.ErrorImage;
+                    }
+                }).Start();
             }
         }
 
@@ -289,18 +346,21 @@ namespace BasicFacebookFeatures
             listBoxPosts.Items.Clear();
             foreach (Post post in allPosts)
             {
-                if (post.Message != null)
+                listBoxPosts.Invoke(new Action(() =>
                 {
-                    listBoxPosts.Items.Add(post.Message);
-                }
-                else if (post.Caption != null)
-                {
-                    listBoxPosts.Items.Add(post.Caption);
-                }
-                else
-                {
-                    listBoxPosts.Items.Add(string.Format("[{0}]", post.Type));
-                }
+                    if (post.Message != null)
+                    {
+                        listBoxPosts.Items.Add(post.Message);
+                    }
+                    else if (post.Caption != null)
+                    {
+                        listBoxPosts.Items.Add(post.Caption);
+                    }
+                    else
+                    {
+                        listBoxPosts.Items.Add(string.Format("[{0}]", post.Type));
+                    }
+                }));
             }
 
             if (listBoxPosts.Items.Count == 0)
@@ -344,7 +404,7 @@ namespace BasicFacebookFeatures
 
         private void displayLikesByMonthBarChart(Album i_Album, Chart io_ChartLikesByMonth)
         {
-            io_ChartLikesByMonth.Series.Clear();
+            io_ChartLikesByMonth.Invoke(new Action(() => io_ChartLikesByMonth.Series.Clear()));
 
             IEnumerable<IGrouping<int, Photo>> groupedPhotos = i_Album.Photos
                 .Where(photo => photo.CreatedTime != null)
@@ -368,10 +428,13 @@ namespace BasicFacebookFeatures
 
         private void initialChart(Chart o_ChartLikes)
         {
-            o_ChartLikes.ChartAreas[0].AxisX.Interval = 1;
-            o_ChartLikes.ChartAreas[0].AxisY.Title = "Number of Likes";
-            o_ChartLikes.ChartAreas[0].AxisX.Title = "Months";
-            o_ChartLikes.ChartAreas[0].RecalculateAxesScale();
+            o_ChartLikes.Invoke(new Action(()=>
+            {
+                o_ChartLikes.ChartAreas[0].AxisX.Interval = 1;
+                o_ChartLikes.ChartAreas[0].AxisY.Title = "Number of Likes";
+                o_ChartLikes.ChartAreas[0].AxisX.Title = "Months";
+                o_ChartLikes.ChartAreas[0].RecalculateAxesScale();
+            }));    
         }
 
         private string getMonthName(int i_MonthNumber)

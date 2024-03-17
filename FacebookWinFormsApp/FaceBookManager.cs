@@ -4,7 +4,7 @@ using FacebookWrapper;
 
 namespace BasicFacebookFeatures
 {
-    public class FacebookManager
+    public class FacebookManager : ILogoutObserver
     {
         private readonly string r_AppId;
         private User m_LoggedInUser;
@@ -14,7 +14,7 @@ namespace BasicFacebookFeatures
         public FacebookManager(string i_AppId)
         {
             r_AppId = i_AppId;
-            AlbumManager = new AlbumManager();
+            AlbumManager = AlbumManager.Instance;
         }
 
         public void Login()
@@ -71,6 +71,12 @@ namespace BasicFacebookFeatures
         public FacebookObjectCollection<Post> GetPosts()
         {
             return m_LoggedInUser.Posts;
+        }
+
+        public void NotifyLoggedOut()
+        {
+            m_LoggedInUser = null;
+            LoginResult = null;
         }
     }
 }

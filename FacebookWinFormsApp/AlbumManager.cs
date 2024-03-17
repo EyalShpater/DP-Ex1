@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -7,12 +9,38 @@ using FacebookWrapper.ObjectModel;
 
 namespace BasicFacebookFeatures
 {
-    public class AlbumManager
+    public sealed class AlbumManager : IEnumerable<Photo>
     {
+        private static AlbumManager s_Instance = null;
+        private static object s_LockObj = new object();
         private FacebookObjectCollection<Photo> m_Photos; 
         private Album m_Album;
         private eSortOption m_SortOption = eSortOption.Likes;
         private int m_CurrentImageIndex = 0;
+        private Predicate<Photo> m_Filter;
+
+        private AlbumManager() { }
+
+        public static AlbumManager Instance
+        {
+            get
+            {
+                if (s_Instance == null)
+                {
+                    lock(s_LockObj)
+                    {
+                        if (s_Instance == null)
+                        {
+                            s_Instance = new AlbumManager();
+                        }
+                    }
+                }
+
+                return s_Instance;
+            }
+        }
+
+        
 
         public Album Album
         {
@@ -122,6 +150,22 @@ namespace BasicFacebookFeatures
             { 
                 client.DownloadFile(i_PhotoUrl, i_Destination);
             }
+        }
+
+        public IEnumerator<Photo> GetEnumerator()
+        {
+            foreach (Photo photo in m_Photos)
+            {
+                if (m_Filter(photo))
+                {
+                    yield return photo;
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return m_Photos.GetEnumerator();
         }
     }
 }
