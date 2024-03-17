@@ -360,32 +360,34 @@ namespace BasicFacebookFeatures
 
         private void fetchPosts()
         {
-            FacebookObjectCollection<Post> allPosts = r_FacebookManager.GetPosts();
+            postBindingSource.DataSource = r_FacebookManager.GetPosts();
 
-            listBoxPosts.Invoke(new Action(() => listBoxPosts.Items.Clear()));
-            foreach (Post post in allPosts)
-            {
-                listBoxPosts.Invoke(new Action(() =>
-                {
-                    if (post.Message != null)
-                    {
-                        listBoxPosts.Items.Add(post.Message);
-                    }
-                    else if (post.Caption != null)
-                    {
-                        listBoxPosts.Items.Add(post.Caption);
-                    }
-                    else
-                    {
-                        listBoxPosts.Items.Add(string.Format("[{0}]", post.Type));
-                    }
-                }));
-            }
+            //FacebookObjectCollection<Post> allPosts = r_FacebookManager.GetPosts();
 
-            if (listBoxPosts.Items.Count == 0)
-            {
-                MessageBox.Show("No Posts to retrieve :(");
-            }
+            //listBoxPosts.Invoke(new Action(() => listBoxPosts.Items.Clear()));
+            //foreach (Post post in allPosts)
+            //{
+            //    listBoxPosts.Invoke(new Action(() =>
+            //    {
+            //        if (post.Message != null)
+            //        {
+            //            listBoxPosts.Items.Add(post.Message);
+            //        }
+            //        else if (post.Caption != null)
+            //        {
+            //            listBoxPosts.Items.Add(post.Caption);
+            //        }
+            //        else
+            //        {
+            //            listBoxPosts.Items.Add(string.Format("[{0}]", post.Type));
+            //        }
+            //    }));
+            //}
+
+            //if (listBoxPosts.Items.Count == 0)
+            //{
+            //    MessageBox.Show("No Posts to retrieve :(");
+            //}
         }
 
         private void makePictureBoxCircle(PictureBox i_PictureBox)

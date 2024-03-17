@@ -30,9 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.Label createdTimeLabel;
+            System.Windows.Forms.Label descriptionLabel;
+            System.Windows.Forms.Label linkLabel;
+            System.Windows.Forms.Label messageLabel;
             this.panelTop = new System.Windows.Forms.Panel();
             this.buttonHamburger = new System.Windows.Forms.PictureBox();
             this.labelHeader = new System.Windows.Forms.Label();
@@ -72,6 +76,16 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.comboBoxSortBy = new System.Windows.Forms.ComboBox();
             this.labelSortBy = new System.Windows.Forms.Label();
+            this.panelPostDetails = new System.Windows.Forms.Panel();
+            this.postBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.createdTimeDateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.descriptionTextBox = new System.Windows.Forms.TextBox();
+            this.linkLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.messageTextBox = new System.Windows.Forms.TextBox();
+            createdTimeLabel = new System.Windows.Forms.Label();
+            descriptionLabel = new System.Windows.Forms.Label();
+            linkLabel = new System.Windows.Forms.Label();
+            messageLabel = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.buttonHamburger)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartLikesByMonth)).BeginInit();
@@ -82,6 +96,8 @@
             this.panelPosts.SuspendLayout();
             this.panelProilePictureAndWritePost.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).BeginInit();
+            this.panelPostDetails.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.postBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // panelTop
@@ -94,18 +110,18 @@
             this.panelTop.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1593, 83);
+            this.panelTop.Size = new System.Drawing.Size(1062, 54);
             this.panelTop.TabIndex = 0;
             this.panelTop.Tag = "Header";
             // 
             // buttonHamburger
             // 
             this.buttonHamburger.Image = ((System.Drawing.Image)(resources.GetObject("buttonHamburger.Image")));
-            this.buttonHamburger.Location = new System.Drawing.Point(33, 19);
-            this.buttonHamburger.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonHamburger.Location = new System.Drawing.Point(22, 12);
             this.buttonHamburger.Name = "buttonHamburger";
-            this.buttonHamburger.Size = new System.Drawing.Size(57, 48);
+            this.buttonHamburger.Size = new System.Drawing.Size(38, 31);
             this.buttonHamburger.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.buttonHamburger.TabIndex = 3;
             this.buttonHamburger.TabStop = false;
@@ -115,9 +131,10 @@
             // 
             this.labelHeader.AutoSize = true;
             this.labelHeader.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelHeader.Location = new System.Drawing.Point(116, 19);
+            this.labelHeader.Location = new System.Drawing.Point(77, 12);
+            this.labelHeader.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelHeader.Name = "labelHeader";
-            this.labelHeader.Size = new System.Drawing.Size(407, 50);
+            this.labelHeader.Size = new System.Drawing.Size(251, 31);
             this.labelHeader.TabIndex = 2;
             this.labelHeader.Text = "Welcome To FaceBook !";
             // 
@@ -127,11 +144,10 @@
             this.buttonLogin.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonLogin.Image = ((System.Drawing.Image)(resources.GetObject("buttonLogin.Image")));
             this.buttonLogin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonLogin.Location = new System.Drawing.Point(1218, 12);
-            this.buttonLogin.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonLogin.Location = new System.Drawing.Point(812, 8);
             this.buttonLogin.Name = "buttonLogin";
-            this.buttonLogin.Padding = new System.Windows.Forms.Padding(38, 0, 0, 0);
-            this.buttonLogin.Size = new System.Drawing.Size(339, 64);
+            this.buttonLogin.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.buttonLogin.Size = new System.Drawing.Size(226, 41);
             this.buttonLogin.TabIndex = 19;
             this.buttonLogin.Text = "Login";
             this.buttonLogin.UseVisualStyleBackColor = false;
@@ -140,17 +156,19 @@
             // labelFaceBookItems
             // 
             this.labelFaceBookItems.AutoSize = true;
-            this.labelFaceBookItems.Location = new System.Drawing.Point(243, 520);
+            this.labelFaceBookItems.Location = new System.Drawing.Point(162, 333);
+            this.labelFaceBookItems.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelFaceBookItems.Name = "labelFaceBookItems";
-            this.labelFaceBookItems.Size = new System.Drawing.Size(0, 25);
+            this.labelFaceBookItems.Size = new System.Drawing.Size(0, 16);
             this.labelFaceBookItems.TabIndex = 7;
             // 
             // comboBoxFacebookItems
             // 
             this.comboBoxFacebookItems.FormattingEnabled = true;
-            this.comboBoxFacebookItems.Location = new System.Drawing.Point(423, 527);
+            this.comboBoxFacebookItems.Location = new System.Drawing.Point(282, 337);
+            this.comboBoxFacebookItems.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBoxFacebookItems.Name = "comboBoxFacebookItems";
-            this.comboBoxFacebookItems.Size = new System.Drawing.Size(316, 33);
+            this.comboBoxFacebookItems.Size = new System.Drawing.Size(212, 24);
             this.comboBoxFacebookItems.TabIndex = 8;
             this.comboBoxFacebookItems.Tag = "MainComboBox";
             this.comboBoxFacebookItems.Visible = false;
@@ -158,19 +176,18 @@
             // 
             // chartLikesByMonth
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chartLikesByMonth.ChartAreas.Add(chartArea2);
+            chartArea4.Name = "ChartArea1";
+            this.chartLikesByMonth.ChartAreas.Add(chartArea4);
             this.chartLikesByMonth.Enabled = false;
-            legend2.Name = "Legend1";
-            this.chartLikesByMonth.Legends.Add(legend2);
-            this.chartLikesByMonth.Location = new System.Drawing.Point(884, 520);
-            this.chartLikesByMonth.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            legend4.Name = "Legend1";
+            this.chartLikesByMonth.Legends.Add(legend4);
+            this.chartLikesByMonth.Location = new System.Drawing.Point(589, 333);
             this.chartLikesByMonth.Name = "chartLikesByMonth";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chartLikesByMonth.Series.Add(series2);
-            this.chartLikesByMonth.Size = new System.Drawing.Size(627, 397);
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chartLikesByMonth.Series.Add(series4);
+            this.chartLikesByMonth.Size = new System.Drawing.Size(418, 254);
             this.chartLikesByMonth.TabIndex = 9;
             this.chartLikesByMonth.Tag = "MainChart";
             this.chartLikesByMonth.Text = "chartLikesByMonth";
@@ -180,9 +197,10 @@
             // 
             this.buttonDownloadAlbum.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonDownloadAlbum.BackgroundImage")));
             this.buttonDownloadAlbum.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonDownloadAlbum.Location = new System.Drawing.Point(746, 519);
+            this.buttonDownloadAlbum.Location = new System.Drawing.Point(497, 332);
+            this.buttonDownloadAlbum.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonDownloadAlbum.Name = "buttonDownloadAlbum";
-            this.buttonDownloadAlbum.Size = new System.Drawing.Size(68, 47);
+            this.buttonDownloadAlbum.Size = new System.Drawing.Size(45, 30);
             this.buttonDownloadAlbum.TabIndex = 11;
             this.buttonDownloadAlbum.Tag = "Download";
             this.buttonDownloadAlbum.UseVisualStyleBackColor = true;
@@ -193,9 +211,10 @@
             // 
             this.buttonPreviousPhoto.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonPreviousPhoto.BackgroundImage")));
             this.buttonPreviousPhoto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonPreviousPhoto.Location = new System.Drawing.Point(423, 923);
+            this.buttonPreviousPhoto.Location = new System.Drawing.Point(282, 591);
+            this.buttonPreviousPhoto.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonPreviousPhoto.Name = "buttonPreviousPhoto";
-            this.buttonPreviousPhoto.Size = new System.Drawing.Size(75, 34);
+            this.buttonPreviousPhoto.Size = new System.Drawing.Size(50, 22);
             this.buttonPreviousPhoto.TabIndex = 10;
             this.buttonPreviousPhoto.Tag = "Pagination";
             this.buttonPreviousPhoto.UseVisualStyleBackColor = true;
@@ -206,9 +225,10 @@
             // 
             this.buttonNextPhoto.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("buttonNextPhoto.BackgroundImage")));
             this.buttonNextPhoto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonNextPhoto.Location = new System.Drawing.Point(738, 923);
+            this.buttonNextPhoto.Location = new System.Drawing.Point(492, 591);
+            this.buttonNextPhoto.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonNextPhoto.Name = "buttonNextPhoto";
-            this.buttonNextPhoto.Size = new System.Drawing.Size(75, 34);
+            this.buttonNextPhoto.Size = new System.Drawing.Size(50, 22);
             this.buttonNextPhoto.TabIndex = 10;
             this.buttonNextPhoto.Tag = "Pagination";
             this.buttonNextPhoto.UseVisualStyleBackColor = true;
@@ -217,9 +237,10 @@
             // 
             // pictureBoxFacebookItem
             // 
-            this.pictureBoxFacebookItem.Location = new System.Drawing.Point(423, 581);
+            this.pictureBoxFacebookItem.Location = new System.Drawing.Point(282, 372);
+            this.pictureBoxFacebookItem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBoxFacebookItem.Name = "pictureBoxFacebookItem";
-            this.pictureBoxFacebookItem.Size = new System.Drawing.Size(390, 336);
+            this.pictureBoxFacebookItem.Size = new System.Drawing.Size(260, 215);
             this.pictureBoxFacebookItem.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxFacebookItem.TabIndex = 6;
             this.pictureBoxFacebookItem.TabStop = false;
@@ -235,7 +256,6 @@
             this.miniToolStrip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.miniToolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.miniToolStrip.Font = new System.Drawing.Font("Segoe UI", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.miniToolStrip.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.miniToolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.miniToolStrip.Location = new System.Drawing.Point(558, 288);
             this.miniToolStrip.Name = "miniToolStrip";
@@ -247,32 +267,32 @@
             // 
             this.albumsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.albumsToolStripMenuItem.Name = "albumsToolStripMenuItem";
-            this.albumsToolStripMenuItem.Size = new System.Drawing.Size(259, 54);
+            this.albumsToolStripMenuItem.Size = new System.Drawing.Size(259, 36);
             this.albumsToolStripMenuItem.Text = "Albums";
             // 
             // pagesToolStripMenuItem
             // 
             this.pagesToolStripMenuItem.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.pagesToolStripMenuItem.Name = "pagesToolStripMenuItem";
-            this.pagesToolStripMenuItem.Size = new System.Drawing.Size(259, 54);
+            this.pagesToolStripMenuItem.Size = new System.Drawing.Size(259, 36);
             this.pagesToolStripMenuItem.Text = "Pages";
             // 
             // groupsToolStripMenuItem
             // 
             this.groupsToolStripMenuItem.Name = "groupsToolStripMenuItem";
-            this.groupsToolStripMenuItem.Size = new System.Drawing.Size(259, 54);
+            this.groupsToolStripMenuItem.Size = new System.Drawing.Size(259, 36);
             this.groupsToolStripMenuItem.Text = "Groups";
             // 
             // wallPostsToolStripMenuItem
             // 
             this.wallPostsToolStripMenuItem.Name = "wallPostsToolStripMenuItem";
-            this.wallPostsToolStripMenuItem.Size = new System.Drawing.Size(259, 54);
+            this.wallPostsToolStripMenuItem.Size = new System.Drawing.Size(259, 36);
             this.wallPostsToolStripMenuItem.Text = "Wall Posts";
             // 
             // Statistics
             // 
             this.Statistics.Name = "Statistics";
-            this.Statistics.Size = new System.Drawing.Size(259, 54);
+            this.Statistics.Size = new System.Drawing.Size(259, 36);
             this.Statistics.Text = "Statistics";
             // 
             // menuStripLeft
@@ -282,7 +302,6 @@
             this.menuStripLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.menuStripLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.menuStripLeft.Font = new System.Drawing.Font("Segoe UI", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menuStripLeft.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStripLeft.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStripLeft.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.albumsToolStripMenuItem,
@@ -307,10 +326,9 @@
             this.menu.Controls.Add(this.statisticsButton);
             this.menu.Controls.Add(this.buttonLogout);
             this.menu.Dock = System.Windows.Forms.DockStyle.Left;
-            this.menu.Location = new System.Drawing.Point(0, 83);
-            this.menu.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.menu.Location = new System.Drawing.Point(0, 54);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(344, 942);
+            this.menu.Size = new System.Drawing.Size(229, 602);
             this.menu.TabIndex = 12;
             this.menu.Tag = "Menu";
             // 
@@ -320,11 +338,10 @@
             this.albumsButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.albumsButton.Image = ((System.Drawing.Image)(resources.GetObject("albumsButton.Image")));
             this.albumsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.albumsButton.Location = new System.Drawing.Point(4, 5);
-            this.albumsButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.albumsButton.Location = new System.Drawing.Point(3, 3);
             this.albumsButton.Name = "albumsButton";
-            this.albumsButton.Padding = new System.Windows.Forms.Padding(38, 0, 0, 0);
-            this.albumsButton.Size = new System.Drawing.Size(339, 64);
+            this.albumsButton.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.albumsButton.Size = new System.Drawing.Size(226, 41);
             this.albumsButton.TabIndex = 13;
             this.albumsButton.Text = "Albums";
             this.albumsButton.UseVisualStyleBackColor = false;
@@ -336,11 +353,10 @@
             this.pagesButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pagesButton.Image = ((System.Drawing.Image)(resources.GetObject("pagesButton.Image")));
             this.pagesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.pagesButton.Location = new System.Drawing.Point(4, 79);
-            this.pagesButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pagesButton.Location = new System.Drawing.Point(3, 50);
             this.pagesButton.Name = "pagesButton";
-            this.pagesButton.Padding = new System.Windows.Forms.Padding(38, 0, 0, 0);
-            this.pagesButton.Size = new System.Drawing.Size(339, 64);
+            this.pagesButton.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.pagesButton.Size = new System.Drawing.Size(226, 41);
             this.pagesButton.TabIndex = 14;
             this.pagesButton.Text = "Pages";
             this.pagesButton.UseVisualStyleBackColor = false;
@@ -352,11 +368,10 @@
             this.groupsButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupsButton.Image = ((System.Drawing.Image)(resources.GetObject("groupsButton.Image")));
             this.groupsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.groupsButton.Location = new System.Drawing.Point(4, 153);
-            this.groupsButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupsButton.Location = new System.Drawing.Point(3, 97);
             this.groupsButton.Name = "groupsButton";
-            this.groupsButton.Padding = new System.Windows.Forms.Padding(38, 0, 0, 0);
-            this.groupsButton.Size = new System.Drawing.Size(339, 64);
+            this.groupsButton.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.groupsButton.Size = new System.Drawing.Size(226, 41);
             this.groupsButton.TabIndex = 15;
             this.groupsButton.Text = "Groups";
             this.groupsButton.UseVisualStyleBackColor = false;
@@ -368,11 +383,10 @@
             this.postsButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.postsButton.Image = ((System.Drawing.Image)(resources.GetObject("postsButton.Image")));
             this.postsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.postsButton.Location = new System.Drawing.Point(4, 227);
-            this.postsButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.postsButton.Location = new System.Drawing.Point(3, 144);
             this.postsButton.Name = "postsButton";
-            this.postsButton.Padding = new System.Windows.Forms.Padding(38, 0, 0, 0);
-            this.postsButton.Size = new System.Drawing.Size(339, 64);
+            this.postsButton.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.postsButton.Size = new System.Drawing.Size(226, 41);
             this.postsButton.TabIndex = 16;
             this.postsButton.Text = "Posts";
             this.postsButton.UseVisualStyleBackColor = false;
@@ -384,11 +398,10 @@
             this.statisticsButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statisticsButton.Image = ((System.Drawing.Image)(resources.GetObject("statisticsButton.Image")));
             this.statisticsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.statisticsButton.Location = new System.Drawing.Point(4, 301);
-            this.statisticsButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.statisticsButton.Location = new System.Drawing.Point(3, 191);
             this.statisticsButton.Name = "statisticsButton";
-            this.statisticsButton.Padding = new System.Windows.Forms.Padding(38, 0, 0, 0);
-            this.statisticsButton.Size = new System.Drawing.Size(339, 64);
+            this.statisticsButton.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.statisticsButton.Size = new System.Drawing.Size(226, 41);
             this.statisticsButton.TabIndex = 17;
             this.statisticsButton.Text = "Statistics";
             this.statisticsButton.UseVisualStyleBackColor = false;
@@ -400,11 +413,10 @@
             this.buttonLogout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonLogout.Image = ((System.Drawing.Image)(resources.GetObject("buttonLogout.Image")));
             this.buttonLogout.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonLogout.Location = new System.Drawing.Point(4, 375);
-            this.buttonLogout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonLogout.Location = new System.Drawing.Point(3, 238);
             this.buttonLogout.Name = "buttonLogout";
-            this.buttonLogout.Padding = new System.Windows.Forms.Padding(38, 0, 0, 0);
-            this.buttonLogout.Size = new System.Drawing.Size(339, 64);
+            this.buttonLogout.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.buttonLogout.Size = new System.Drawing.Size(226, 41);
             this.buttonLogout.TabIndex = 18;
             this.buttonLogout.Text = "Logout";
             this.buttonLogout.UseVisualStyleBackColor = false;
@@ -419,9 +431,10 @@
             // 
             this.mostLikedPictureLabel.AutoSize = true;
             this.mostLikedPictureLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mostLikedPictureLabel.Location = new System.Drawing.Point(448, 520);
+            this.mostLikedPictureLabel.Location = new System.Drawing.Point(299, 333);
+            this.mostLikedPictureLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.mostLikedPictureLabel.Name = "mostLikedPictureLabel";
-            this.mostLikedPictureLabel.Size = new System.Drawing.Size(216, 32);
+            this.mostLikedPictureLabel.Size = new System.Drawing.Size(133, 20);
             this.mostLikedPictureLabel.TabIndex = 28;
             this.mostLikedPictureLabel.Tag = "TopPictureLabel";
             this.mostLikedPictureLabel.Text = "Most Liked Picture:";
@@ -430,10 +443,9 @@
             // comboBoxForAlbum
             // 
             this.comboBoxForAlbum.FormattingEnabled = true;
-            this.comboBoxForAlbum.Location = new System.Drawing.Point(726, 456);
-            this.comboBoxForAlbum.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBoxForAlbum.Location = new System.Drawing.Point(484, 292);
             this.comboBoxForAlbum.Name = "comboBoxForAlbum";
-            this.comboBoxForAlbum.Size = new System.Drawing.Size(349, 33);
+            this.comboBoxForAlbum.Size = new System.Drawing.Size(234, 24);
             this.comboBoxForAlbum.TabIndex = 29;
             this.comboBoxForAlbum.Tag = "TopCenterComboBox";
             this.comboBoxForAlbum.Visible = false;
@@ -441,10 +453,9 @@
             // 
             // mostLikedPic
             // 
-            this.mostLikedPic.Location = new System.Drawing.Point(423, 572);
-            this.mostLikedPic.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.mostLikedPic.Location = new System.Drawing.Point(282, 366);
             this.mostLikedPic.Name = "mostLikedPic";
-            this.mostLikedPic.Size = new System.Drawing.Size(267, 227);
+            this.mostLikedPic.Size = new System.Drawing.Size(178, 145);
             this.mostLikedPic.TabIndex = 30;
             this.mostLikedPic.TabStop = false;
             this.mostLikedPic.Tag = "SmallPictureBox";
@@ -453,21 +464,25 @@
             // panelPosts
             // 
             this.panelPosts.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.panelPosts.Controls.Add(this.panelPostDetails);
             this.panelPosts.Controls.Add(this.listBoxPosts);
-            this.panelPosts.Location = new System.Drawing.Point(423, 444);
+            this.panelPosts.Location = new System.Drawing.Point(282, 284);
+            this.panelPosts.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panelPosts.Name = "panelPosts";
-            this.panelPosts.Size = new System.Drawing.Size(1135, 513);
+            this.panelPosts.Size = new System.Drawing.Size(757, 328);
             this.panelPosts.TabIndex = 32;
             this.panelPosts.Tag = "PostsPanel";
             this.panelPosts.Visible = false;
             // 
             // listBoxPosts
             // 
+            this.listBoxPosts.DataSource = this.postBindingSource;
             this.listBoxPosts.FormattingEnabled = true;
-            this.listBoxPosts.ItemHeight = 25;
-            this.listBoxPosts.Location = new System.Drawing.Point(22, 22);
+            this.listBoxPosts.ItemHeight = 16;
+            this.listBoxPosts.Location = new System.Drawing.Point(15, 14);
+            this.listBoxPosts.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listBoxPosts.Name = "listBoxPosts";
-            this.listBoxPosts.Size = new System.Drawing.Size(1079, 479);
+            this.listBoxPosts.Size = new System.Drawing.Size(332, 308);
             this.listBoxPosts.TabIndex = 0;
             // 
             // panelProilePictureAndWritePost
@@ -477,25 +492,28 @@
             this.panelProilePictureAndWritePost.Controls.Add(this.buttonClear);
             this.panelProilePictureAndWritePost.Controls.Add(this.buttonPost);
             this.panelProilePictureAndWritePost.Controls.Add(this.richTextBoxNewPost);
-            this.panelProilePictureAndWritePost.Location = new System.Drawing.Point(423, 119);
+            this.panelProilePictureAndWritePost.Location = new System.Drawing.Point(282, 76);
+            this.panelProilePictureAndWritePost.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panelProilePictureAndWritePost.Name = "panelProilePictureAndWritePost";
-            this.panelProilePictureAndWritePost.Size = new System.Drawing.Size(1135, 319);
+            this.panelProilePictureAndWritePost.Size = new System.Drawing.Size(757, 204);
             this.panelProilePictureAndWritePost.TabIndex = 33;
             this.panelProilePictureAndWritePost.Tag = "Profile";
             // 
             // pictureBoxProfile
             // 
-            this.pictureBoxProfile.Location = new System.Drawing.Point(12, 37);
+            this.pictureBoxProfile.Location = new System.Drawing.Point(8, 24);
+            this.pictureBoxProfile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBoxProfile.Name = "pictureBoxProfile";
-            this.pictureBoxProfile.Size = new System.Drawing.Size(195, 195);
+            this.pictureBoxProfile.Size = new System.Drawing.Size(130, 125);
             this.pictureBoxProfile.TabIndex = 8;
             this.pictureBoxProfile.TabStop = false;
             // 
             // buttonClear
             // 
-            this.buttonClear.Location = new System.Drawing.Point(229, 237);
+            this.buttonClear.Location = new System.Drawing.Point(153, 152);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(135, 44);
+            this.buttonClear.Size = new System.Drawing.Size(90, 28);
             this.buttonClear.TabIndex = 6;
             this.buttonClear.Text = "Clear";
             this.buttonClear.UseVisualStyleBackColor = true;
@@ -503,9 +521,10 @@
             // 
             // buttonPost
             // 
-            this.buttonPost.Location = new System.Drawing.Point(966, 237);
+            this.buttonPost.Location = new System.Drawing.Point(644, 152);
+            this.buttonPost.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonPost.Name = "buttonPost";
-            this.buttonPost.Size = new System.Drawing.Size(135, 44);
+            this.buttonPost.Size = new System.Drawing.Size(90, 28);
             this.buttonPost.TabIndex = 7;
             this.buttonPost.Text = "Post!";
             this.buttonPost.UseVisualStyleBackColor = true;
@@ -513,9 +532,10 @@
             // 
             // richTextBoxNewPost
             // 
-            this.richTextBoxNewPost.Location = new System.Drawing.Point(229, 37);
+            this.richTextBoxNewPost.Location = new System.Drawing.Point(153, 24);
+            this.richTextBoxNewPost.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.richTextBoxNewPost.Name = "richTextBoxNewPost";
-            this.richTextBoxNewPost.Size = new System.Drawing.Size(872, 195);
+            this.richTextBoxNewPost.Size = new System.Drawing.Size(583, 126);
             this.richTextBoxNewPost.TabIndex = 5;
             this.richTextBoxNewPost.Text = "";
             // 
@@ -529,9 +549,10 @@
             // 
             this.comboBoxSortBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSortBy.FormattingEnabled = true;
-            this.comboBoxSortBy.Location = new System.Drawing.Point(572, 963);
+            this.comboBoxSortBy.Location = new System.Drawing.Point(381, 616);
+            this.comboBoxSortBy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBoxSortBy.Name = "comboBoxSortBy";
-            this.comboBoxSortBy.Size = new System.Drawing.Size(242, 33);
+            this.comboBoxSortBy.Size = new System.Drawing.Size(163, 24);
             this.comboBoxSortBy.TabIndex = 1;
             this.comboBoxSortBy.Tag = "SortBy";
             this.comboBoxSortBy.Visible = false;
@@ -543,19 +564,112 @@
             this.labelSortBy.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.labelSortBy.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSortBy.ForeColor = System.Drawing.Color.Snow;
-            this.labelSortBy.Location = new System.Drawing.Point(429, 965);
+            this.labelSortBy.Location = new System.Drawing.Point(286, 618);
+            this.labelSortBy.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelSortBy.Name = "labelSortBy";
-            this.labelSortBy.Size = new System.Drawing.Size(111, 31);
+            this.labelSortBy.Size = new System.Drawing.Size(70, 20);
             this.labelSortBy.TabIndex = 35;
             this.labelSortBy.Tag = "SortBy";
             this.labelSortBy.Text = "Sort By:";
             this.labelSortBy.Visible = false;
             // 
+            // panelPostDetails
+            // 
+            this.panelPostDetails.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panelPostDetails.Controls.Add(createdTimeLabel);
+            this.panelPostDetails.Controls.Add(this.createdTimeDateTimePicker);
+            this.panelPostDetails.Controls.Add(descriptionLabel);
+            this.panelPostDetails.Controls.Add(this.descriptionTextBox);
+            this.panelPostDetails.Controls.Add(linkLabel);
+            this.panelPostDetails.Controls.Add(this.linkLinkLabel);
+            this.panelPostDetails.Controls.Add(messageLabel);
+            this.panelPostDetails.Controls.Add(this.messageTextBox);
+            this.panelPostDetails.Location = new System.Drawing.Point(382, 14);
+            this.panelPostDetails.Name = "panelPostDetails";
+            this.panelPostDetails.Size = new System.Drawing.Size(354, 308);
+            this.panelPostDetails.TabIndex = 1;
+            // 
+            // postBindingSource
+            // 
+            this.postBindingSource.DataSource = typeof(FacebookWrapper.ObjectModel.Post);
+            // 
+            // createdTimeLabel
+            // 
+            createdTimeLabel.AutoSize = true;
+            createdTimeLabel.Location = new System.Drawing.Point(33, 212);
+            createdTimeLabel.Name = "createdTimeLabel";
+            createdTimeLabel.Size = new System.Drawing.Size(92, 16);
+            createdTimeLabel.TabIndex = 0;
+            createdTimeLabel.Text = "Created Time:";
+            // 
+            // createdTimeDateTimePicker
+            // 
+            this.createdTimeDateTimePicker.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.postBindingSource, "CreatedTime", true));
+            this.createdTimeDateTimePicker.Location = new System.Drawing.Point(131, 208);
+            this.createdTimeDateTimePicker.Name = "createdTimeDateTimePicker";
+            this.createdTimeDateTimePicker.Size = new System.Drawing.Size(200, 22);
+            this.createdTimeDateTimePicker.TabIndex = 1;
+            // 
+            // descriptionLabel
+            // 
+            descriptionLabel.AutoSize = true;
+            descriptionLabel.Location = new System.Drawing.Point(33, 27);
+            descriptionLabel.Name = "descriptionLabel";
+            descriptionLabel.Size = new System.Drawing.Size(78, 16);
+            descriptionLabel.TabIndex = 2;
+            descriptionLabel.Text = "Description:";
+            // 
+            // descriptionTextBox
+            // 
+            this.descriptionTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.postBindingSource, "Description", true));
+            this.descriptionTextBox.Location = new System.Drawing.Point(131, 24);
+            this.descriptionTextBox.Multiline = true;
+            this.descriptionTextBox.Name = "descriptionTextBox";
+            this.descriptionTextBox.Size = new System.Drawing.Size(200, 63);
+            this.descriptionTextBox.TabIndex = 3;
+            // 
+            // linkLabel
+            // 
+            linkLabel.AutoSize = true;
+            linkLabel.Location = new System.Drawing.Point(33, 181);
+            linkLabel.Name = "linkLabel";
+            linkLabel.Size = new System.Drawing.Size(34, 16);
+            linkLabel.TabIndex = 4;
+            linkLabel.Text = "Link:";
+            // 
+            // linkLinkLabel
+            // 
+            this.linkLinkLabel.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.postBindingSource, "Link", true));
+            this.linkLinkLabel.Location = new System.Drawing.Point(131, 181);
+            this.linkLinkLabel.Name = "linkLinkLabel";
+            this.linkLinkLabel.Size = new System.Drawing.Size(200, 23);
+            this.linkLinkLabel.TabIndex = 5;
+            this.linkLinkLabel.TabStop = true;
+            this.linkLinkLabel.Text = "linkLabel1";
+            // 
+            // messageLabel
+            // 
+            messageLabel.AutoSize = true;
+            messageLabel.Location = new System.Drawing.Point(33, 107);
+            messageLabel.Name = "messageLabel";
+            messageLabel.Size = new System.Drawing.Size(67, 16);
+            messageLabel.TabIndex = 6;
+            messageLabel.Text = "Message:";
+            // 
+            // messageTextBox
+            // 
+            this.messageTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.postBindingSource, "Message", true));
+            this.messageTextBox.Location = new System.Drawing.Point(131, 104);
+            this.messageTextBox.Multiline = true;
+            this.messageTextBox.Name = "messageTextBox";
+            this.messageTextBox.Size = new System.Drawing.Size(200, 65);
+            this.messageTextBox.TabIndex = 7;
+            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1593, 1025);
+            this.ClientSize = new System.Drawing.Size(1062, 656);
             this.Controls.Add(this.labelSortBy);
             this.Controls.Add(this.comboBoxSortBy);
             this.Controls.Add(this.mostLikedPic);
@@ -565,14 +679,15 @@
             this.Controls.Add(this.buttonDownloadAlbum);
             this.Controls.Add(this.buttonPreviousPhoto);
             this.Controls.Add(this.buttonNextPhoto);
-            this.Controls.Add(this.chartLikesByMonth);
             this.Controls.Add(this.comboBoxFacebookItems);
             this.Controls.Add(this.labelFaceBookItems);
             this.Controls.Add(this.pictureBoxFacebookItem);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelProilePictureAndWritePost);
             this.Controls.Add(this.panelPosts);
+            this.Controls.Add(this.chartLikesByMonth);
             this.IsMdiContainer = true;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "MainForm";
             this.Text = "MainForm";
             this.panelTop.ResumeLayout(false);
@@ -587,6 +702,9 @@
             this.panelPosts.ResumeLayout(false);
             this.panelProilePictureAndWritePost.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).EndInit();
+            this.panelPostDetails.ResumeLayout(false);
+            this.panelPostDetails.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.postBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -633,5 +751,11 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ComboBox comboBoxSortBy;
         private System.Windows.Forms.Label labelSortBy;
+        private System.Windows.Forms.Panel panelPostDetails;
+        private System.Windows.Forms.DateTimePicker createdTimeDateTimePicker;
+        private System.Windows.Forms.BindingSource postBindingSource;
+        private System.Windows.Forms.TextBox descriptionTextBox;
+        private System.Windows.Forms.LinkLabel linkLinkLabel;
+        private System.Windows.Forms.TextBox messageTextBox;
     }
 }
