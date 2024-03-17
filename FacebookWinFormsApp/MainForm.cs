@@ -125,14 +125,20 @@ namespace BasicFacebookFeatures
 
         private void displaySelectedItem(string i_ImageUrl)
         {
-            if (!string.IsNullOrEmpty(i_ImageUrl))
+            new Thread(() =>
             {
-                pictureBoxFacebookItem.LoadAsync(i_ImageUrl);
-            }
-            else
-            {
-                pictureBoxFacebookItem.Image = pictureBoxFacebookItem.ErrorImage;
-            }
+                pictureBoxFacebookItem.Invoke(new Action(() =>
+                {
+                    if (!string.IsNullOrEmpty(i_ImageUrl))
+                    {
+                        pictureBoxFacebookItem.LoadAsync(i_ImageUrl);
+                    }
+                    else
+                    {
+                        pictureBoxFacebookItem.Image = pictureBoxFacebookItem.ErrorImage;
+                    }
+                }));
+            }).Start();
         }
 
         private void buttonDownloadAlbum_Click(object sender, EventArgs e)
@@ -210,7 +216,11 @@ namespace BasicFacebookFeatures
 
         private void setAlbumComboBoxes()
         {
-            comboBoxFacebookItems.Invoke(new Action(() => comboBoxFacebookItems.DisplayMember = "Name"));
+            comboBoxFacebookItems.Invoke(new Action(() =>
+            {
+                comboBoxFacebookItems.Items.Clear();
+                comboBoxFacebookItems.DisplayMember = "Name";
+            }));
             comboBoxSortBy.Invoke(new Action(() => comboBoxSortBy.DataSource = Enum.GetValues(typeof(eSortOption))));
             foreach (Album album in r_FacebookManager.GetAlbums())
             {
@@ -276,15 +286,25 @@ namespace BasicFacebookFeatures
         {
             m_SelectedMenuItem = eMenuItem.Groups;
             showMenuItemComponents(eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox);
-            comboBoxFacebookItems.DisplayMember = "Name";
-            comboBoxFacebookItems.DataSource = r_FacebookManager.GetGroups();
-
-            if (comboBoxFacebookItems.Items.Count == 0)
-            {
-                MessageBox.Show("No groups to show :(");
-            }
+            new Thread(fetchGroups).Start();
         }
 
+        private void fetchGroups()
+        {
+            comboBoxFacebookItems.Invoke(new Action(() => comboBoxFacebookItems.DisplayMember = "Name"));
+            foreach (Group group in r_FacebookManager.GetGroups())
+            {
+                comboBoxFacebookItems.Invoke(new Action(() => comboBoxFacebookItems.Items.Add(group)));
+            }
+
+            comboBoxFacebookItems.Invoke(new Action(() =>
+            {
+                if (comboBoxFacebookItems.Items.Count == 0)
+                {
+                    MessageBox.Show("No groups to show :(");
+                }
+            }));
+        }
 
         private void statisticsButton_Click(object sender, EventArgs e)
         {
@@ -305,7 +325,6 @@ namespace BasicFacebookFeatures
             {
                 comboBoxForAlbum.Invoke(new Action(() => comboBoxForAlbum.Items.Add(album)));
             }
-          
         }
 
         private void postsButton_Click(object sender, EventArgs e)
@@ -343,7 +362,7 @@ namespace BasicFacebookFeatures
         {
             FacebookObjectCollection<Post> allPosts = r_FacebookManager.GetPosts();
 
-            listBoxPosts.Items.Clear();
+            listBoxPosts.Invoke(new Action(() => listBoxPosts.Items.Clear()));
             foreach (Post post in allPosts)
             {
                 listBoxPosts.Invoke(new Action(() =>
@@ -404,8 +423,7 @@ namespace BasicFacebookFeatures
 
         private void displayLikesByMonthBarChart(Album i_Album, Chart io_ChartLikesByMonth)
         {
-            io_ChartLikesByMonth.Invoke(new Action(() => io_ChartLikesByMonth.Series.Clear()));
-
+            Series series = null;
             IEnumerable<IGrouping<int, Photo>> groupedPhotos = i_Album.Photos
                 .Where(photo => photo.CreatedTime != null)
                 .GroupBy(photo => photo.CreatedTime.Value.Month);
@@ -413,7 +431,12 @@ namespace BasicFacebookFeatures
                 .Select(group => new { Month = group.Key, TotalLikes = group.Sum(photo => photo.LikedBy.Count) })
                 .OrderBy(item => item.Month)
                 .ToList();
-            Series series = io_ChartLikesByMonth.Series.Add($"{i_Album.Name} - Likes by Month");
+
+            io_ChartLikesByMonth.Invoke(new Action(() =>
+            {
+                io_ChartLikesByMonth.Series.Clear();
+                series = io_ChartLikesByMonth.Series.Add($"{i_Album.Name} - Likes by Month");
+            }));
 
             foreach (object dataPoint in likesByMonth)
             {
