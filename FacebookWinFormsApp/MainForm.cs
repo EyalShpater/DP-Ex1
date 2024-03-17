@@ -291,7 +291,11 @@ namespace BasicFacebookFeatures
 
         private void fetchGroups()
         {
-            comboBoxFacebookItems.Invoke(new Action(() => comboBoxFacebookItems.DisplayMember = "Name"));
+            comboBoxFacebookItems.Invoke(new Action(() =>
+            {
+                comboBoxFacebookItems.Items.Clear();
+                comboBoxFacebookItems.DisplayMember = "Name";
+            }));
             foreach (Group group in r_FacebookManager.GetGroups())
             {
                 comboBoxFacebookItems.Invoke(new Action(() => comboBoxFacebookItems.Items.Add(group)));
