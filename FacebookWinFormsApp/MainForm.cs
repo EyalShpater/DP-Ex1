@@ -8,6 +8,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
 using System.Threading;
+using BasicFacebookFeatures.SortStrategy;
 
 namespace BasicFacebookFeatures
 {
@@ -273,7 +274,7 @@ namespace BasicFacebookFeatures
                 comboBoxFacebookItems.Invoke(new Action(() => comboBoxFacebookItems.Items.Add(page)));
             }
 
-            comboBoxFacebookItems.Invoke(new Action(()=>
+            comboBoxFacebookItems.Invoke(new Action(() =>
             {
                 if (comboBoxFacebookItems.Items.Count == 0)
                 {
@@ -365,33 +366,6 @@ namespace BasicFacebookFeatures
         private void fetchPosts()
         {
             postBindingSource.DataSource = r_FacebookManager.GetPosts();
-
-            //FacebookObjectCollection<Post> allPosts = r_FacebookManager.GetPosts();
-
-            //listBoxPosts.Invoke(new Action(() => listBoxPosts.Items.Clear()));
-            //foreach (Post post in allPosts)
-            //{
-            //    listBoxPosts.Invoke(new Action(() =>
-            //    {
-            //        if (post.Message != null)
-            //        {
-            //            listBoxPosts.Items.Add(post.Message);
-            //        }
-            //        else if (post.Caption != null)
-            //        {
-            //            listBoxPosts.Items.Add(post.Caption);
-            //        }
-            //        else
-            //        {
-            //            listBoxPosts.Items.Add(string.Format("[{0}]", post.Type));
-            //        }
-            //    }));
-            //}
-
-            //if (listBoxPosts.Items.Count == 0)
-            //{
-            //    MessageBox.Show("No Posts to retrieve :(");
-            //}
         }
 
         private void makePictureBoxCircle(PictureBox i_PictureBox)
@@ -423,8 +397,21 @@ namespace BasicFacebookFeatures
         {
             if (comboBoxSortBy.SelectedItem is eSortOption sortOption)
             {
-                r_FacebookManager.AlbumManager.SortAlbum(sortOption);
-            } 
+                switch (sortOption)
+                {
+                    case eSortOption.Likes:
+                        r_FacebookManager.AlbumManager.SortStrategy = new SortByLikes();
+                        break;
+                    case eSortOption.Comments:
+                        r_FacebookManager.AlbumManager.SortStrategy = new SortByComments();
+                        break;
+                    case eSortOption.Date:
+                        r_FacebookManager.AlbumManager.SortStrategy = new SortByCreateTime();
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         private void displayLikesByMonthBarChart(Album i_Album, Chart io_ChartLikesByMonth)
