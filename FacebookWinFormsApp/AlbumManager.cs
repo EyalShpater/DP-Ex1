@@ -9,17 +9,20 @@ using FacebookWrapper.ObjectModel;
 
 namespace BasicFacebookFeatures
 {
-    public sealed class AlbumManager : IEnumerable<Photo>
+    public sealed class AlbumManager
     {
         private static AlbumManager s_Instance = null;
         private static object s_LockObj = new object();
         private FacebookObjectCollection<Photo> m_Photos; 
         private Album m_Album;
-        private eSortOption m_SortOption = eSortOption.Likes;
+        //private eSortOption m_SortOption = eSortOption.Likes;
         private int m_CurrentImageIndex = 0;
-        private Predicate<Photo> m_Filter;
+        private ISortStrategy m_SortStrategy;
 
-        private AlbumManager() { }
+        private AlbumManager() 
+        { 
+            SortStrategy = new SortByLikes();
+        }
 
         public static AlbumManager Instance
         {
@@ -40,8 +43,6 @@ namespace BasicFacebookFeatures
             }
         }
 
-        
-
         public Album Album
         {
             get
@@ -54,9 +55,26 @@ namespace BasicFacebookFeatures
                 m_Album = value;
                 m_CurrentImageIndex = 0;
                 m_Photos = m_Album.Photos;
-                SortAlbum(m_SortOption);
+                sortAlbum();
             }
         }
+
+        public ISortStrategy SortStrategy { 
+            get
+            {
+                return m_SortStrategy;
+            }
+
+            set
+            {
+                if (m_SortStrategy != null)
+                {
+                    m_SortStrategy = value;
+                    sortAlbum();
+                }
+            } 
+        }
+
 
         public string GetPictureAlbumUrl()
         {
@@ -101,26 +119,10 @@ namespace BasicFacebookFeatures
             }
         }
 
-        public void SortAlbum(eSortOption i_SortOption)
+        private void sortAlbum()
         {
-            if(i_SortOption != m_SortOption)
-            {
-                switch(i_SortOption)
-                {
-                    case eSortOption.Likes:
-                        m_Photos.OrderBy(photo => photo.LikedBy.Count);
-                        break;
-                    case eSortOption.Comments:
-                        m_Photos.OrderBy(photo => photo.Comments.Count);
-                        break;
-                    case eSortOption.Date:
-                        m_Photos.OrderBy(photo => photo.CreatedTime);
-                        break;
-                }
-
-                m_SortOption = i_SortOption;
-                m_CurrentImageIndex = 0;
-            }
+            m_SortStrategy.SortAlbum(m_Album);
+            m_CurrentImageIndex = 0;
         }
 
         public string FindTheMostLikedImageInAlbum(Album i_CurrentViewingAlbum)
@@ -151,21 +153,6 @@ namespace BasicFacebookFeatures
                 client.DownloadFile(i_PhotoUrl, i_Destination);
             }
         }
-
-        public IEnumerator<Photo> GetEnumerator()
-        {
-            foreach (Photo photo in m_Photos)
-            {
-                if (m_Filter(photo))
-                {
-                    yield return photo;
-                }
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return m_Photos.GetEnumerator();
-        }
     }
 }
+
