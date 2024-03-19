@@ -92,13 +92,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlbumManager.cs" />
-    <Compile Include="DownloadAlbumAdapter.cs" />
     <Compile Include="eFormControlTag.cs" />
     <Compile Include="eMenuItem.cs" />
     <Compile Include="eSortOption.cs" />
     <Compile Include="FacebookManager.cs" />
     <Compile Include="ILoginObserver.cs" />
-    <Compile Include="IOneParameterThreadAdapter.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,7 +123,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\BasicFacebookFeatures.Properties.Resources.datasource" />
     <None Include="Properties\DataSources\BasicFacebookFeatures.Properties.Settings.datasource" />

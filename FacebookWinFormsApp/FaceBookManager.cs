@@ -13,27 +13,27 @@ namespace BasicFacebookFeatures
         public AlbumManager AlbumManager { get; }
         private List<ILoginObserver> m_Observers = new List<ILoginObserver>();
 
-
         public FacebookManager(string i_AppId)
         {
             r_AppId = i_AppId;
             AlbumManager = AlbumManager.Instance;
         }
-        public void RegisterObserver(ILoginObserver observer)
+
+        public void RegisterObserver(ILoginObserver i_Observer)
         {
-            m_Observers.Add(observer);
+            m_Observers.Add(i_Observer);
         }
 
-        public void RemoveObserver(ILoginObserver observer)
+        public void RemoveObserver(ILoginObserver i_Observer)
         {
-            m_Observers.Remove(observer);
+            m_Observers.Remove(i_Observer);
         }
 
-        private void NotifyObservers(bool isLoggedIn)
+        private void NotifyObservers(bool i_IsLoggedIn)
         {
-            foreach (var observer in m_Observers)
+            foreach (ILoginObserver observer in m_Observers)
             {
-                observer.UpdateLoginStatus(isLoggedIn);
+                observer.UpdateLoginStatus(i_IsLoggedIn);
             }
         }
 
@@ -92,12 +92,6 @@ namespace BasicFacebookFeatures
         public FacebookObjectCollection<Post> GetPosts()
         {
             return m_LoggedInUser.Posts;
-        }
-
-        public void NotifyLoggedOut()
-        {
-            m_LoggedInUser = null;
-            LoginResult = null;
         }
     }
 }

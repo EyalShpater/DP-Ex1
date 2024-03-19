@@ -15,7 +15,6 @@ namespace BasicFacebookFeatures
         private static object s_LockObj = new object();
         private FacebookObjectCollection<Photo> m_Photos; 
         private Album m_Album;
-        //private eSortOption m_SortOption = eSortOption.Likes;
         private int m_CurrentImageIndex = 0;
         private ISortStrategy m_SortStrategy;
 
@@ -74,7 +73,6 @@ namespace BasicFacebookFeatures
                 }
             } 
         }
-
 
         public string GetPictureAlbumUrl()
         {

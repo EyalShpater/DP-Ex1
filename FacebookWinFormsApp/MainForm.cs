@@ -29,7 +29,7 @@ namespace BasicFacebookFeatures
             makePictureBoxCircle(pictureBoxProfile);
             menu.Enabled = false;
             panelProilePictureAndWritePost.Enabled = false;
-            this.StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)
@@ -58,9 +58,9 @@ namespace BasicFacebookFeatures
                 MessageBox.Show(ex.Message);
             }
         }
-        public void UpdateLoginStatus(bool i_isLoggedIn)
+        public void UpdateLoginStatus(bool i_IsLoggedIn)
         {
-            if (i_isLoggedIn)
+            if (i_IsLoggedIn)
             {
                 buttonLogin.Invoke(new Action(() =>
                     {
@@ -83,8 +83,8 @@ namespace BasicFacebookFeatures
             buttonLogin.Text = "Login";
             buttonLogin.Enabled = true;
             buttonLogout.Enabled = false;
-            // clear all data
         }
+
         private void buttonPost_Click(object sender, EventArgs e)
         {
             try
@@ -254,10 +254,7 @@ namespace BasicFacebookFeatures
         {
             m_SelectedMenuItem = eMenuItem.Pages;
             showMenuItemComponents(eFormControlTag.MainPictureBox, eFormControlTag.MainComboBox);
-            new Thread(() =>
-            {
-                fetchPages();
-            }).Start();
+            new Thread(fetchPages).Start();
         }
 
         private void fetchPages()
