@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace BasicFacebookFeatures
 {
-    internal interface ILogoutObserver
+    public interface ILoginObserver
     {
-        void NotifyLoggedOut();
+        void UpdateLoginStatus(bool isLoggedIn);
     }
 }

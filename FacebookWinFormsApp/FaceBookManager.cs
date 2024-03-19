@@ -1,20 +1,40 @@
 ﻿using System;
 using FacebookWrapper.ObjectModel;
 using FacebookWrapper;
+using System.Collections.Generic;
 
 namespace BasicFacebookFeatures
 {
-    public class FacebookManager : ILogoutObserver
+    public class FacebookManager 
     {
         private readonly string r_AppId;
         private User m_LoggedInUser;
         public LoginResult LoginResult { get; set; }
         public AlbumManager AlbumManager { get; }
+        private List<ILoginObserver> m_Observers = new List<ILoginObserver>();
+
 
         public FacebookManager(string i_AppId)
         {
             r_AppId = i_AppId;
             AlbumManager = AlbumManager.Instance;
+        }
+        public void RegisterObserver(ILoginObserver observer)
+        {
+            m_Observers.Add(observer);
+        }
+
+        public void RemoveObserver(ILoginObserver observer)
+        {
+            m_Observers.Remove(observer);
+        }
+
+        private void NotifyObservers(bool isLoggedIn)
+        {
+            foreach (var observer in m_Observers)
+            {
+                observer.UpdateLoginStatus(isLoggedIn);
+            }
         }
 
         public void Login()
@@ -38,6 +58,7 @@ namespace BasicFacebookFeatures
             if (string.IsNullOrEmpty(LoginResult.ErrorMessage))
             {
                 m_LoggedInUser = LoginResult.LoggedInUser;
+                NotifyObservers(true);
             }
         }
 

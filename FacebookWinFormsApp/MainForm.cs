@@ -12,9 +12,8 @@ using BasicFacebookFeatures.SortStrategy;
 
 namespace BasicFacebookFeatures
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form , ILoginObserver
     {
-        private readonly List<ILogoutObserver> r_logoutObservers = new List<ILogoutObserver>();
         private static readonly eFormControlTag[] sr_DefaultFormComponents = { eFormControlTag.Header, eFormControlTag.Profile, eFormControlTag.Menu };
         private const string k_AppId = "1828145884290754";
         private const int k_CollectionLimit = 25;
@@ -36,6 +35,8 @@ namespace BasicFacebookFeatures
         private void buttonLogin_Click(object sender, EventArgs e)
         {
             Clipboard.SetText("design.patterns");
+            r_FacebookManager.RegisterObserver(this);
+
             if (r_FacebookManager.LoginResult == null)
             {
                 new Thread(login).Start();
@@ -49,17 +50,7 @@ namespace BasicFacebookFeatures
                 r_FacebookManager.Login();
                 if (string.IsNullOrEmpty(r_FacebookManager.LoginResult.ErrorMessage))
                 {
-                    buttonLogin.Invoke(new Action(() =>
-                    {
-                        buttonLogin.Text = $"Welcome {r_FacebookManager.LoginResult.LoggedInUser.Name}!";
-                        buttonLogin.BackColor = Color.LightBlue;
-                        buttonLogin.Image = null;
-                        buttonLogin.Enabled = false;
-                    }));
-                    pictureBoxProfile.Invoke(new Action(() => pictureBoxProfile.ImageLocation = r_FacebookManager.LoginResult.LoggedInUser.PictureNormalURL));
-                    buttonLogout.Invoke(new Action(() => buttonLogout.Enabled = true));
-                    menu.Invoke(new Action(() => menu.Enabled = true));
-                    panelProilePictureAndWritePost.Invoke(new Action(() => panelProilePictureAndWritePost.Enabled = true));
+                    UpdateLoginStatus(true);
                 }
             }
             catch (Exception ex)
@@ -67,31 +58,38 @@ namespace BasicFacebookFeatures
                 MessageBox.Show(ex.Message);
             }
         }
+        public void UpdateLoginStatus(bool i_isLoggedIn)
+        {
+            if (i_isLoggedIn)
+            {
+                buttonLogin.Invoke(new Action(() =>
+                    {
+                        buttonLogin.Text = $"Welcome {r_FacebookManager.LoginResult.LoggedInUser.Name}!";
+                        buttonLogin.BackColor = Color.LightBlue;
+                        buttonLogin.Image = null;
+                        buttonLogin.Enabled = false;
+                    }));
+                pictureBoxProfile.Invoke(new Action(() => pictureBoxProfile.ImageLocation = r_FacebookManager.LoginResult.LoggedInUser.PictureNormalURL));
+                buttonLogout.Invoke(new Action(() => buttonLogout.Enabled = true));
+                menu.Invoke(new Action(() => menu.Enabled = true));
+                panelProilePictureAndWritePost.Invoke(new Action(() => panelProilePictureAndWritePost.Enabled = true));
+            }
+        }
 
         private void buttonLogout_Click(object sender, EventArgs e)
         {
             FacebookService.LogoutWithUI();
+            UpdateLoginStatus(false);
             buttonLogin.Text = "Login";
             buttonLogin.Enabled = true;
             buttonLogout.Enabled = false;
-            notifyLogoutObservers();
             // clear all data
         }
-
-        private void notifyLogoutObservers()
-        {
-            foreach (ILogoutObserver observer in r_logoutObservers)
-            {
-                observer.NotifyLoggedOut();
-            }
-        }
-
         private void buttonPost_Click(object sender, EventArgs e)
         {
             try
             {
                 string postedStatusId = r_FacebookManager.PostStatus(richTextBoxNewPost.Text);
-
                 MessageBox.Show("Status Posted! ID: " + postedStatusId);
             }
             catch (Exception ex)
