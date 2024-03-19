@@ -12,7 +12,7 @@ using BasicFacebookFeatures.SortStrategy;
 
 namespace BasicFacebookFeatures
 {
-    public partial class MainForm : Form , ILoginObserver
+    public partial class MainForm : Form, ILoginObserver
     {
         private static readonly eFormControlTag[] sr_DefaultFormComponents = { eFormControlTag.Header, eFormControlTag.Profile, eFormControlTag.Menu };
         private const string k_AppId = "1828145884290754";
@@ -58,6 +58,7 @@ namespace BasicFacebookFeatures
                 MessageBox.Show(ex.Message);
             }
         }
+
         public void UpdateLoginStatus(bool i_IsLoggedIn)
         {
             if (i_IsLoggedIn)

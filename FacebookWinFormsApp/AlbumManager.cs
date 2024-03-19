@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -29,7 +27,7 @@ namespace BasicFacebookFeatures
             {
                 if (s_Instance == null)
                 {
-                    lock(s_LockObj)
+                    lock (s_LockObj)
                     {
                         if (s_Instance == null)
                         {
@@ -54,7 +52,7 @@ namespace BasicFacebookFeatures
                 m_Album = value;
                 m_CurrentImageIndex = 0;
                 m_Photos = m_Album.Photos;
-                sortAlbum();
+                SortStrategy = new SortByLikes();
             }
         }
 
@@ -81,7 +79,9 @@ namespace BasicFacebookFeatures
 
         public string GetNextPhotoUrl()
         {
-            m_CurrentImageIndex = (m_CurrentImageIndex + 1) % m_Album.Photos.Count;
+            m_CurrentImageIndex = m_Album.Photos.Count != 0 ? 
+                (m_CurrentImageIndex + 1) % m_Album.Photos.Count : 
+                m_CurrentImageIndex;
 
             return m_Photos.ElementAt(m_CurrentImageIndex).PictureNormalURL;
         }
